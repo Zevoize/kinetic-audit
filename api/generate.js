@@ -12,11 +12,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { prompt } = req.body;
+  const { prompt, max_tokens: reqTokens } = req.body;
 
-  if (!prompt || typeof prompt !== 'string' || prompt.length > 8000) {
+  if (!prompt || typeof prompt !== 'string' || prompt.length > 12000) {
     return res.status(400).json({ error: 'Invalid prompt' });
   }
+  const maxTokens = Math.min(reqTokens || 1000, 2000);
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
@@ -33,7 +34,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        max_tokens: maxTokens,
         messages: [{ role: 'user', content: prompt }],
       }),
     });
