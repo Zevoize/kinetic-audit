@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -924,6 +923,45 @@ function showScreen(id) {
   }
 }
 
+function clearAllFields() {
+  // Clear every textarea in the document
+  document.querySelectorAll('textarea').forEach(function(t) {
+    t.value = '';
+  });
+  // Clear text and email inputs
+  document.querySelectorAll('input[type="text"]').forEach(function(i) {
+    i.value = '';
+  });
+  document.querySelectorAll('input[type="email"]').forEach(function(i) {
+    i.value = '';
+  });
+  // Clear hidden inputs
+  document.querySelectorAll('input[type="hidden"]').forEach(function(i) {
+    i.value = '';
+  });
+  // Remove selected class from all scale buttons
+  document.querySelectorAll('.scale-btn').forEach(function(b) {
+    b.classList.remove('selected');
+  });
+  // Clear stage 2 dynamic questions
+  var s2 = document.getElementById('stage2-questions');
+  if (s2) s2.innerHTML = '';
+  // Reset stage 3 question text to baseline default
+  var s3q = document.getElementById('s3-q1-text');
+  if (s3q) s3q.textContent = 'If this situation — exactly as it is — were trying to teach you something, what would it be teaching you?';
+  // Hide error messages
+  document.querySelectorAll('.error-msg').forEach(function(e) {
+    e.style.display = 'none';
+  });
+  // Restore any hidden result sections
+  var resonance = document.getElementById('result-resonance-block');
+  var protocol  = document.getElementById('result-protocol-block');
+  var behaviour = document.querySelector('.behaviour-note');
+  if (resonance) resonance.style.display = 'block';
+  if (protocol)  protocol.style.display  = 'block';
+  if (behaviour) behaviour.style.display = 'block';
+}
+
 function updateProgress(stage) {
   const bar = document.getElementById('progressBar');
   bar.style.display = 'flex';
@@ -935,7 +973,7 @@ function updateProgress(stage) {
   }
 }
 
-function goToPath() { showScreen('path'); }
+function goToPath() { clearAllFields(); showScreen('path'); }
 
 function choosePath(path) {
   state.path = path;
@@ -1213,7 +1251,6 @@ function hideError(id) {
   document.getElementById(id).style.display = 'none';
 }
 function restartAudit() {
-  // Reset state object
   state.path = null;
   state.scores = {};
   state.responses = {};
@@ -1221,35 +1258,7 @@ function restartAudit() {
   state.lastName = '';
   state.email = '';
   state.kineticState = '';
-
-  // Clear all textareas
-  document.querySelectorAll('textarea').forEach(t => t.value = '');
-
-  // Clear all text and email inputs
-  document.querySelectorAll('input[type="text"], input[type="email"]').forEach(i => i.value = '');
-
-  // Clear all hidden score inputs
-  document.querySelectorAll('input[type="hidden"]').forEach(i => i.value = '');
-
-  // Deselect all scale buttons
-  document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
-
-  // Clear dynamically rendered Stage 2 questions
-  const s2 = document.getElementById('stage2-questions');
-  if (s2) s2.innerHTML = '';
-
-  // Hide all error messages
-  document.querySelectorAll('.error-msg').forEach(e => e.style.display = 'none');
-
-  // Restore result sections that may have been hidden on previous run
-  const resonance = document.getElementById('result-resonance-block');
-  const protocol  = document.getElementById('result-protocol-block');
-  const behaviour = document.querySelector('.behaviour-note');
-  if (resonance) resonance.style.display = 'block';
-  if (protocol)  protocol.style.display  = 'block';
-  if (behaviour) behaviour.style.display = 'block';
-
-  // Hide progress bar and return to welcome
+  clearAllFields();
   document.getElementById('progressBar').style.display = 'none';
   showScreen('welcome');
   window.scrollTo({ top: 0 });
