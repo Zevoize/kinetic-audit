@@ -14,10 +14,10 @@ export default async function handler(req, res) {
 
   const { prompt, max_tokens: reqTokens } = req.body;
 
-  if (!prompt || typeof prompt !== 'string' || prompt.length > 12000) {
+  if (!prompt || typeof prompt !== 'string' || prompt.length > 80000) {
     return res.status(400).json({ error: 'Invalid prompt' });
   }
-  const maxTokens = Math.min(reqTokens || 1000, 2000);
+  const maxTokens = Math.min(reqTokens || 1000, 4000);
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
