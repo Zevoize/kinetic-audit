@@ -1241,7 +1241,7 @@ async function generateResults() {
   // (minScore, maxScore, momentumRating, isInRhythm are available in this scope)
 
   const contextSummary = state.path === 'baseline'
-    ? 'Momentum self-rating: ' + momentumRating + '/5. Reality: "' + state.responses.reality + '". Groundedness rating: ' + state.responses.stability + '/5.'
+    ? (function() { var m = momentumRating; var g = parseInt(state.responses.stability) || 3; return 'Overall momentum: ' + (m >= 4 ? 'strong' : m === 3 ? 'moderate' : 'low') + '. Operational groundedness: ' + (g >= 4 ? 'solid' : g === 3 ? 'variable' : 'shaky') + '. Reality described as: "' + state.responses.reality + '".'; })()
     : 'Specific situation: "' + state.responses.situation + '". Sphere of responsibility: "' + state.responses.role + '".';
 
   const modeInstruction = isInRhythm
@@ -1271,7 +1271,19 @@ ${modeInstruction}
 PARTICIPANT DATA:
 - Path: ${state.path === 'baseline' ? 'Kinetic Baseline (general state)' : 'Kinetic Lens (specific situation)'}
 - Context: ${contextSummary}${lensLine}
-- Elemental scores (out of 10): Earth ${state.scores.Earth} · Air ${state.scores.Air} · Water ${state.scores.Water} · Fire ${state.scores.Fire}
+- Elemental pattern: ${(function() {
+  const s = state.scores;
+  const avg = (s.Earth + s.Air + s.Water + s.Fire) / 4;
+  function describe(v, avg) {
+    const diff = v - avg;
+    if (v >= 8) return 'strongly present';
+    if (v >= 6) return 'present';
+    if (v >= 4) return 'active but stretched';
+    if (v >= 2) return 'significantly depleted';
+    return 'critically absent';
+  }
+  return 'Earth is ' + describe(s.Earth, avg) + ', Air is ' + describe(s.Air, avg) + ', Water is ' + describe(s.Water, avg) + ', Fire is ' + describe(s.Fire, avg);
+})()}
 - Kinetic reading: ${ks.name} (${ks.subtitle})
 - What they feel this is teaching them: \"${state.responses.teach}\"
 - What they feel this needs from them: \"${state.responses.need}\"
@@ -1283,6 +1295,8 @@ Never use: 'flow' unless naming the Water element specifically (use: momentum, k
 Never use: 'journey' (use: cycle, rotation, swing, the rosette forming)
 Never use: 'healing', 'fix', 'fixing', 'toxic'
 Never frame a strong score as secretly a weakness
+Never mention numbers, scores, or ratings in your output — translate everything into human language
+Never say things like 'your Earth scored 7' or 'with a Fire of 4' — describe what is present or absent in words only
 
 Write exactly four sections labelled in square brackets:
 
