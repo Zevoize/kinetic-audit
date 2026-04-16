@@ -812,13 +812,13 @@ input::placeholder { color: #7a7a72; }
 
     <div class="question-block">
       <div class="question-context">Before strategy, before solutions</div>
-      <div class="question-text" id="s3-q1-text">If this specific situation — exactly as you have described it — were trying to teach you something, what would it be teaching you? Stay with the situation itself, not your life in general.</div>
+      <div class="question-text" id="s3-q1-text">If this moment — exactly as it is — were trying to teach you something, what would it be teaching you?</div>
       <textarea id="q-feel-teach" placeholder="Trust the first answer that arrives. Don't edit it." rows="4"></textarea>
     </div>
 
     <div class="question-block">
       <div class="question-context">The felt sense</div>
-      <div class="question-text" id="s3-q2-text">Set aside what you think you should do. What does this specific situation feel like it actually needs — from you, right now?</div>
+      <div class="question-text" id="s3-q2-text">Set aside what you think you should do. What does this moment feel like it actually needs — from you, right now?</div>
       <textarea id="q-feel-need" placeholder="Not the logical answer. The felt one." rows="3"></textarea>
     </div>
 
@@ -1008,7 +1008,7 @@ function clearAllFields() {
   if (s2) s2.innerHTML = '';
   // Reset stage 3 question text to baseline default
   var s3q = document.getElementById('s3-q1-text');
-  if (s3q) s3q.textContent = 'If this specific situation — exactly as you have described it — were trying to teach you something, what would it be teaching you? Stay with the situation itself, not your life in general.';
+  if (s3q) s3q.textContent = 'If this moment — exactly as it is — were trying to teach you something, what would it be teaching you?';
   // Hide error messages
   document.querySelectorAll('.error-msg').forEach(function(e) {
     e.style.display = 'none';
@@ -1051,11 +1051,11 @@ function choosePath(path) {
   document.getElementById('s1-lens').style.display = path === 'lens' ? 'block' : 'none';
   // Set Stage 3 question text based on path
   const s3q = document.getElementById('s3-q1-text');
-  if (path === 'lens') {
-    s3q.textContent = 'If this specific situation — exactly as you described it — were trying to teach you something, what would it be teaching you?';
-  } else {
-    s3q.textContent = 'If this specific situation — exactly as you have described it — were trying to teach you something, what would it be teaching you? Stay with the situation itself, not your life in general.';
+  if (path !== 'lens') {
+    // Baseline: reset to general text
+    s3q.textContent = 'If this moment — exactly as it is — were trying to teach you something, what would it be teaching you?';
   }
+  // Lens: Stage 3 Q1 is dynamically rewritten in goToStage2 using their actual situation text
   showScreen('stage1');
   updateProgress(1);
 }
@@ -1162,7 +1162,12 @@ function computeKineticState() {
 
   if (deficits.length >= 3) {
     const avg = (s.Earth + s.Air + s.Water + s.Fire) / 4;
-    return avg >= 7 ? { name: 'Inertia', subtitle: 'Static Equilibrium · All elements in tension', deficits } :
+    // High scores that are close together = strong rotation, not Inertia
+    // Inertia only applies when elements are flat in the mid-range (3-5), not when they are all high
+    if (avg >= 7) {
+      return { name: 'Balanced State', subtitle: 'Strong rotation · All four elements active', deficits };
+    }
+    return avg >= 5 ? { name: 'Inertia', subtitle: 'Static Equilibrium · All elements in tension', deficits } :
                       { name: 'Absolute Zero', subtitle: 'Total systemic exhaustion · All elements depleted', deficits };
   }
   if (deficits.length === 2) {
@@ -1201,6 +1206,18 @@ async function generateResults() {
   state.email = email;
 
   const ks = computeKineticState();
+
+  // When in Rhythm mode, override any ambiguous state label with positive framing
+  const minScore = Math.min(state.scores.Earth, state.scores.Air, state.scores.Water, state.scores.Fire);
+  const maxScore = Math.max(state.scores.Earth, state.scores.Air, state.scores.Water, state.scores.Fire);
+  const momentumRating = parseInt(state.responses.momentum) || 3;
+  const isInRhythm = (state.path === 'baseline') && (minScore >= 5) && (maxScore - minScore <= 3) && (momentumRating >= 4);
+
+  if (isInRhythm && (ks.name === 'Inertia' || ks.name === 'Balanced State')) {
+    ks.name = 'In Full Rotation';
+    ks.subtitle = 'All four elements active · Focusynthesis® in motion';
+  }
+
   state.kineticState = ks.name;
 
   document.getElementById('result-state-name').textContent = ks.name;
@@ -1220,11 +1237,8 @@ async function generateResults() {
     document.getElementById('loading-sub-text').textContent = loadingTexts[li++ % loadingTexts.length];
   }, 2000);
 
-  // Determine output mode: RHYTHM (strong, no deficit) vs REPAIR (genuine deficit)
-  const minScore = Math.min(state.scores.Earth, state.scores.Air, state.scores.Water, state.scores.Fire);
-  const maxScore = Math.max(state.scores.Earth, state.scores.Air, state.scores.Water, state.scores.Fire);
-  const momentumRating = parseInt(state.responses.momentum) || 3;
-  const isInRhythm = (state.path === 'baseline') && (minScore >= 5) && (maxScore - minScore <= 3) && (momentumRating >= 4);
+  // isInRhythm already computed above when building the result display
+  // (minScore, maxScore, momentumRating, isInRhythm are available in this scope)
 
   const contextSummary = state.path === 'baseline'
     ? 'Momentum self-rating: ' + momentumRating + '/5. Reality: "' + state.responses.reality + '". Groundedness rating: ' + state.responses.stability + '/5.'
