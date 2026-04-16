@@ -13,10 +13,10 @@
   --card: #161614;
   --gold: #c8a84b;
   --gold-light: #e2c97e;
-  --gold-dim: #7a6530;
+  --gold-dim: #b09040;
   --cream: #f5f0e4;
-  --cream-dim: #c8c0a8;
-  --muted: #5a5a52;
+  --cream-dim: #e0d8c4;
+  --muted: #8a8a80;
   --earth: #2d4a2d;
   --earth-light: #3d6b3d;
   --air: #2d3a55;
@@ -256,7 +256,7 @@ body::before {
   font-size: 20px;
   font-weight: 400;
   line-height: 1.5;
-  color: var(--cream);
+  color: #f8f2e4;
   margin-bottom: 20px;
 }
 
@@ -270,10 +270,10 @@ body::before {
   flex: 1;
   min-width: 48px;
   height: 48px;
-  border: 1px solid rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
   border-radius: 8px;
   background: transparent;
-  color: var(--cream-dim);
+  color: #d8d0bc;
   font-family: 'Jost', sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -313,7 +313,7 @@ textarea {
   outline: none;
 }
 textarea:focus { border-color: var(--gold-dim); }
-textarea::placeholder { color: var(--muted); }
+textarea::placeholder { color: #7a7a72; }
 
 /* ── TEXT INPUT ── */
 input[type="text"], input[type="email"] {
@@ -331,7 +331,7 @@ input[type="text"], input[type="email"] {
   outline: none;
 }
 input:focus { border-color: var(--gold-dim); }
-input::placeholder { color: var(--muted); }
+input::placeholder { color: #7a7a72; }
 
 /* ── COMMITMENT BLOCK ── */
 .commitment-block {
@@ -398,6 +398,26 @@ input::placeholder { color: var(--muted); }
 }
 .btn-ghost:hover { border-color: var(--gold-dim); color: var(--gold); }
 
+/* ── COACH SELECTOR ── */
+.coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 auto 40px;max-width:480px;}
+.coach-card{
+  background:var(--card);border:1px solid rgba(200,168,75,.15);
+  border-radius:12px;padding:28px 22px;cursor:pointer;
+  transition:border-color .3s,transform .2s,box-shadow .3s;text-align:center;
+}
+.coach-card:hover{border-color:rgba(200,168,75,.5);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4);}
+.coach-card.selected{border-color:var(--gold);background:rgba(200,168,75,.08);}
+.coach-initial{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(200,168,75,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:600;color:var(--gold);
+  margin:0 auto 12px;
+}
+.coach-card-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--cream);margin-bottom:4px;}
+.coach-card-role{font-size:12px;color:var(--cream-dim);}
+
 /* ── EMAIL GATE ── */
 .email-gate {
   background: var(--card);
@@ -417,7 +437,7 @@ input::placeholder { color: var(--muted); }
 .gate-sub {
   font-size: 14px;
   line-height: 1.7;
-  color: var(--cream-dim);
+  color: #ddd6c0;
   margin-bottom: 28px;
 }
 .name-row {
@@ -489,7 +509,7 @@ input::placeholder { color: var(--muted); }
 .result-section-body {
   font-size: 15px;
   line-height: 1.8;
-  color: var(--cream-dim);
+  color: #ddd6c0;
 }
 .result-section-body strong {
   color: var(--cream);
@@ -538,7 +558,7 @@ input::placeholder { color: var(--muted); }
 .behaviour-note-text {
   font-size: 14px;
   line-height: 1.75;
-  color: var(--cream-dim);
+  color: #ddd6c0;
   font-style: italic;
 }
 
@@ -658,7 +678,27 @@ input::placeholder { color: var(--muted); }
     <h1 class="headline">What does this<br><em>moment</em> require<br>of you?</h1>
     <p class="subtext">A guided micro-growth cycle built on the Focusynthesis® model. Not a quiz — a mirror. In four stages, you will read your current elemental state and take one concrete step forward.</p>
     <p class="subtext" style="font-size:13px; margin-bottom:0;">Takes approximately 6–8 minutes.</p>
-    <button class="btn-primary" onclick="goToPath()" style="margin-top:36px;">Begin the Audit</button>
+    <button class="btn-primary" onclick="showScreen('coach')" style="margin-top:36px;">Begin the Audit</button>
+  </div>
+
+  <!-- ══ SCREEN: COACH SELECTOR ══ -->
+  <div class="screen" id="screen-coach">
+    <div class="eyebrow" style="margin-top:52px;">Before we begin</div>
+    <h1 class="headline" style="font-size:clamp(24px,4vw,36px);">Who is facilitating<br><em>this session?</em></h1>
+    <p class="subtext">Select the coach guiding you through this audit.</p>
+    <div class="coach-grid">
+      <div class="coach-card" id="coach-card-s" onclick="selectCoach('Stéphane Browet','coach-card-s')">
+        <div class="coach-initial">S</div>
+        <div class="coach-card-name">Stéphane Browet</div>
+        <div class="coach-card-role">Air · Fire axis</div>
+      </div>
+      <div class="coach-card" id="coach-card-v" onclick="selectCoach('Séverine Naessens','coach-card-v')">
+        <div class="coach-initial">V</div>
+        <div class="coach-card-name">Séverine Naessens</div>
+        <div class="coach-card-role">Earth · Water axis</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="btn-coach-continue" onclick="goToPath()" disabled style="opacity:.4;cursor:not-allowed;">Continue to Audit</button>
   </div>
 
   <!-- ══ SCREEN 1: PATH CHOICE ══ -->
@@ -692,6 +732,19 @@ input::placeholder { color: var(--muted); }
 
     <!-- BASELINE questions -->
     <div id="s1-baseline">
+      <div class="question-block">
+        <div class="question-context">Read the moment</div>
+        <div class="question-text">Right now, how would you honestly describe the overall momentum of your life and work?</div>
+        <div class="scale" id="scale-baseline-momentum">
+          <button class="scale-btn" onclick="selectScale(this,'q-baseline-momentum')">1</button>
+          <button class="scale-btn" onclick="selectScale(this,'q-baseline-momentum')">2</button>
+          <button class="scale-btn" onclick="selectScale(this,'q-baseline-momentum')">3</button>
+          <button class="scale-btn" onclick="selectScale(this,'q-baseline-momentum')">4</button>
+          <button class="scale-btn" onclick="selectScale(this,'q-baseline-momentum')">5</button>
+        </div>
+        <div class="scale-labels"><span>Significantly stuck</span><span>In strong momentum</span></div>
+        <input type="hidden" id="q-baseline-momentum" value="">
+      </div>
       <div class="question-block">
         <div class="question-context">Name your reality</div>
         <div class="question-text">In one or two sentences, how would you honestly describe where you are right now — professionally and personally?</div>
@@ -759,13 +812,13 @@ input::placeholder { color: var(--muted); }
 
     <div class="question-block">
       <div class="question-context">Before strategy, before solutions</div>
-      <div class="question-text" id="s3-q1-text">If this situation — exactly as it is — were trying to teach you something, what would it be teaching you?</div>
+      <div class="question-text" id="s3-q1-text">If this specific situation — exactly as you have described it — were trying to teach you something, what would it be teaching you? Stay with the situation itself, not your life in general.</div>
       <textarea id="q-feel-teach" placeholder="Trust the first answer that arrives. Don't edit it." rows="4"></textarea>
     </div>
 
     <div class="question-block">
       <div class="question-context">The felt sense</div>
-      <div class="question-text">Set aside what you think you should do. What does this moment feel like it actually needs — from you, right now?</div>
+      <div class="question-text" id="s3-q2-text">Set aside what you think you should do. What does this specific situation feel like it actually needs — from you, right now?</div>
       <textarea id="q-feel-need" placeholder="Not the logical answer. The felt one." rows="3"></textarea>
     </div>
 
@@ -889,12 +942,14 @@ input::placeholder { color: var(--muted); }
 // ══════════════════════════════════════════════
 const state = {
   path: null,        // 'baseline' | 'lens'
+  coach: '',         // 'Stéphane Browet' | 'Séverine Naessens'
   scores: {},        // element → total score
   responses: {},     // all free-text and scale answers
   firstName: '',
   lastName: '',
   email: '',
   kineticState: '',
+  aiResults: {},     // parsed AI output for email
 };
 
 // ══════════════════════════════════════════════
@@ -928,6 +983,11 @@ function clearAllFields() {
   document.querySelectorAll('textarea').forEach(function(t) {
     t.value = '';
   });
+  // Reset momentum calibration
+  var momField = document.getElementById('q-baseline-momentum');
+  if (momField) momField.value = '';
+  var momScale = document.getElementById('scale-baseline-momentum');
+  if (momScale) momScale.querySelectorAll('.scale-btn').forEach(function(b) { b.classList.remove('selected'); });
   // Clear text and email inputs
   document.querySelectorAll('input[type="text"]').forEach(function(i) {
     i.value = '';
@@ -948,7 +1008,7 @@ function clearAllFields() {
   if (s2) s2.innerHTML = '';
   // Reset stage 3 question text to baseline default
   var s3q = document.getElementById('s3-q1-text');
-  if (s3q) s3q.textContent = 'If this situation — exactly as it is — were trying to teach you something, what would it be teaching you?';
+  if (s3q) s3q.textContent = 'If this specific situation — exactly as you have described it — were trying to teach you something, what would it be teaching you? Stay with the situation itself, not your life in general.';
   // Hide error messages
   document.querySelectorAll('.error-msg').forEach(function(e) {
     e.style.display = 'none';
@@ -973,6 +1033,16 @@ function updateProgress(stage) {
   }
 }
 
+function selectCoach(name, cardId) {
+  state.coach = name;
+  document.querySelectorAll('.coach-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById(cardId).classList.add('selected');
+  const btn = document.getElementById('btn-coach-continue');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+}
+
 function goToPath() { clearAllFields(); showScreen('path'); }
 
 function choosePath(path) {
@@ -984,7 +1054,7 @@ function choosePath(path) {
   if (path === 'lens') {
     s3q.textContent = 'If this specific situation — exactly as you described it — were trying to teach you something, what would it be teaching you?';
   } else {
-    s3q.textContent = 'If this situation — exactly as it is — were trying to teach you something, what would it be teaching you?';
+    s3q.textContent = 'If this specific situation — exactly as you have described it — were trying to teach you something, what would it be teaching you? Stay with the situation itself, not your life in general.';
   }
   showScreen('stage1');
   updateProgress(1);
@@ -995,13 +1065,21 @@ function goToStage2() {
   if (state.path === 'baseline') {
     if (!document.getElementById('q-baseline-reality').value.trim()) valid = false;
     if (!document.getElementById('q-baseline-ground').value) valid = false;
-    state.responses.reality = document.getElementById('q-baseline-reality').value.trim();
+    state.responses.reality   = document.getElementById('q-baseline-reality').value.trim();
     state.responses.stability = document.getElementById('q-baseline-ground').value;
+    state.responses.momentum  = document.getElementById('q-baseline-momentum').value || '';
   } else {
     if (!document.getElementById('q-lens-situation').value.trim()) valid = false;
     if (!document.getElementById('q-lens-role').value.trim()) valid = false;
     state.responses.situation = document.getElementById('q-lens-situation').value.trim();
-    state.responses.role = document.getElementById('q-lens-role').value.trim();
+    state.responses.role      = document.getElementById('q-lens-role').value.trim();
+    // Anchor Stage 3 questions to the specific situation for Lens path
+    var sit = state.responses.situation;
+    var short = sit.length > 60 ? sit.substring(0, 57) + '…' : sit;
+    var q1 = document.getElementById('s3-q1-text');
+    var q2 = document.getElementById('s3-q2-text');
+    if (q1) q1.textContent = 'If this specific situation — ' + short + ' — were trying to teach you something, what would it be teaching you?';
+    if (q2) q2.textContent = 'Set aside what you think you should do. What does this situation feel like it actually needs — from you, right now?';
   }
   if (!valid) { showError('err-s1'); return; }
   hideError('err-s1');
@@ -1016,7 +1094,7 @@ function renderStage2Questions() {
   diagnosticQuestions.forEach((q, idx) => {
     container.innerHTML += `
       <div class="question-block">
-        <div class="question-context">${q.cat} · ${idx+1} of ${diagnosticQuestions.length}</div>
+        <div class="question-context">Statement · ${idx+1} of ${diagnosticQuestions.length}</div>
         <div class="question-text">${q.text}</div>
         <div class="scale" id="scale-${q.id}">
           ${[1,2,3,4,5].map(n => `<button class="scale-btn" onclick="selectScale(this,'diag-${q.id}')">${n}</button>`).join('')}
@@ -1142,39 +1220,71 @@ async function generateResults() {
     document.getElementById('loading-sub-text').textContent = loadingTexts[li++ % loadingTexts.length];
   }, 2000);
 
+  // Determine output mode: RHYTHM (strong, no deficit) vs REPAIR (genuine deficit)
+  const minScore = Math.min(state.scores.Earth, state.scores.Air, state.scores.Water, state.scores.Fire);
+  const maxScore = Math.max(state.scores.Earth, state.scores.Air, state.scores.Water, state.scores.Fire);
+  const momentumRating = parseInt(state.responses.momentum) || 3;
+  const isInRhythm = (state.path === 'baseline') && (minScore >= 5) && (maxScore - minScore <= 3) && (momentumRating >= 4);
+
   const contextSummary = state.path === 'baseline'
-    ? `The participant described their current reality as: "${state.responses.reality}". They rated their operational groundedness at ${state.responses.stability}/5.`
-    : `The participant brought this specific situation: "${state.responses.situation}". Their sphere of responsibility: "${state.responses.role}".`;
+    ? 'Momentum self-rating: ' + momentumRating + '/5. Reality: "' + state.responses.reality + '". Groundedness rating: ' + state.responses.stability + '/5.'
+    : 'Specific situation: "' + state.responses.situation + '". Sphere of responsibility: "' + state.responses.role + '".';
 
-  const prompt = `You are a master diagnostician trained in the Focusynthesis® growth model developed by Stéphane Browet and Séverine Naessens at Focus Academy Global. You are writing a personalised Kinetic Audit result for ${state.firstName}.
+  const modeInstruction = isInRhythm
+    ? 'OUTPUT MODE: RHYTHM. This participant is in active Focusynthesis® — strong scores across all four elements, no significant deficit, high momentum self-rating. Do NOT write repair language or prescribe a protocol as if something is broken. Celebrate what is in motion. Name the leading elemental force. Help them be intentional about sustaining and deepening the current cycle.'
+    : 'OUTPUT MODE: REPAIR. There is a genuine elemental deficit. Write with warmth and precision. Name what is missing, describe the lived experience of that deficit using their own words, and give a specific protocol to restore momentum.';
 
-THE MODEL CONTEXT:
-The Kinetic Self uses four elemental forces — Earth (stability/boundaries), Air (clarity/strategy), Water (intuition/resonance), Fire (execution/action) — plus S, the Self as the conscious pivot (the Quintessence). When one or more elements drop, the system enters a Shadow State. The Focusynthesis® mechanism is how the Self grows by cycling deliberately through all four elements.
+  const lensLine = state.path === 'lens' ? '\n- Situation: "' + state.responses.situation + '"' : '';
+
+  const diagInstruction = isInRhythm
+    ? '2-3 sentences. Name the elemental pattern that is strongest and what it signals. Use their actual words to show you have read their specific situation. Frame this as deliberate operation, not luck. Do not suggest anything is missing or needs fixing.'
+    : '2-3 sentences. Name the missing element and the Kinetic State. Describe the lived experience from the inside — not clinical observation but the felt reality. Use their actual words and reference something specific from their context.';
+
+  const gapInstruction = isInRhythm
+    ? '2-3 sentences. When someone is in full rotation, the resonance gap is small — what they feel they need is what they are already providing. Name this absence of gap precisely. This is a moment of recognition, not correction.'
+    : '2-3 sentences. Describe the gap between what they said this moment needs (Stage 3) and what their elemental pattern shows they have been doing instead. Be precise — this is the most revealing section. The resonance gap is where growth begins.';
+
+  const protocolInstruction = isInRhythm
+    ? '2-3 sentences. Do not prescribe a repair. Name the natural next phase of their cycle — which element wants to come forward next in a healthy seasonal rotation. Give one intentional action to deepen the current cycle. Frame this as the difference between reactive and deliberate Focusynthesis®.'
+    : '3-4 sentences. Name the specific protocol for the deficit — Anchor (Earth), Oxygen (Air), Flux (Water), Ignition (Fire). Explain why this element first. Give one concrete micro-action for the next hour or two, distinct from their 24-hour commitment. Specific, not aspirational.';
+
+  const prompt = `You are writing a personalised Kinetic Audit result for ${state.firstName}. You work for Focus Academy Global, trained in the Focusynthesis\u00AE growth model by St\u00E9phane Browet and S\u00E9verine Naessens.
+
+THE MODEL: The Self (S) is the conscious pivot — the operator wielding four elemental forces: Earth (stability, boundaries, containment), Air (strategic clarity, elevation above noise), Water (intuition, human resonance, purpose connection), Fire (execution, initiation, converting potential to impact). Focusynthesis\u00AE is the growth mechanism: the Self grows by deliberately cycling through all four elements. The pendulum is always in motion — there is no static destination, only the quality of the swing. The rosette is the visible trace of growth over time.
+
+${modeInstruction}
 
 PARTICIPANT DATA:
-- Path chosen: ${state.path === 'baseline' ? 'Kinetic Baseline (general state)' : 'Kinetic Lens (specific situation)'}
-- Context: ${contextSummary}
-- Elemental scores (out of 10): Earth ${state.scores.Earth}, Air ${state.scores.Air}, Water ${state.scores.Water}, Fire ${state.scores.Fire}
-- Kinetic State identified: ${ks.name} (${ks.subtitle})
-- What they feel the situation is teaching them: "${state.responses.teach}"
-- What they feel the moment actually needs: "${state.responses.need}"
-- Their 24-hour commitment: "${state.responses.commitment}"
+- Path: ${state.path === 'baseline' ? 'Kinetic Baseline (general state)' : 'Kinetic Lens (specific situation)'}
+- Context: ${contextSummary}${lensLine}
+- Elemental scores (out of 10): Earth ${state.scores.Earth} · Air ${state.scores.Air} · Water ${state.scores.Water} · Fire ${state.scores.Fire}
+- Kinetic reading: ${ks.name} (${ks.subtitle})
+- What they feel this is teaching them: \"${state.responses.teach}\"
+- What they feel this needs from them: \"${state.responses.need}\"
+- Their 24-hour commitment: \"${state.responses.commitment}\"
 
-Write four sections, each clearly labelled with the exact label in brackets, no extra formatting:
+LANGUAGE CONSTRAINTS — non-negotiable:
+Never use: 'balance' or 'balanced' (use: rhythm, full rotation, all four elements active, the pendulum swinging freely)
+Never use: 'flow' unless naming the Water element specifically (use: momentum, kinetic energy, the cycle producing, conversion)
+Never use: 'journey' (use: cycle, rotation, swing, the rosette forming)
+Never use: 'healing', 'fix', 'fixing', 'toxic'
+Never frame a strong score as secretly a weakness
+
+Write exactly four sections labelled in square brackets:
 
 [DIAGNOSIS]
-2-3 sentences. Explain their specific Kinetic State using their actual words where possible. Name the missing element precisely. Describe what this feels like from the inside — the lived experience of this state. Do not use jargon. Do not be generic. Reference something specific from their context.
+${diagInstruction}
 
 [RESONANCE_GAP]
-2-3 sentences. Describe the gap between what they said they feel the moment needs (Stage 3) and what their elemental pattern suggests they have been doing instead. This is the most revealing section — be precise and a little uncomfortable. The resonance gap is where the real growth is.
+${gapInstruction}
 
 [PROTOCOL]
-3-4 sentences. Give them the specific, immediate protocol for their state. Name which element to restore first and why. Give one concrete, behavioural step they can take today — not the 24-hour commitment they already named, but a complementary micro-action for the next hour or two. Be specific, not aspirational.
+${protocolInstruction}
 
 [BEHAVIOUR]
-1-2 sentences. Observe, gently and precisely, something about HOW they engaged with this audit that reflects their elemental state. Did they write extensively or briefly? Did they name concrete specifics or stay abstract? Was their commitment vague or precise? Frame it as an invitation to notice, not a criticism.
+1-2 sentences. Name something precise about HOW they engaged with this audit — the specificity of their writing, the nature of their commitment, how they described their situation. Frame it as an invitation to notice their own operating style. In rhythm or in repair, this should feel like a mirror, not a verdict.
 
-Tone: warm but direct. Intelligent but not academic. This person is a professional in a leadership position. Speak to them as an equal who has seen something true about their situation. Never use the word "journey." Never be generic. Always be specific to their actual words.`;
+Tone: warm, direct, intelligent. Speak as an equal who has seen something true. This person is a professional or leader. Use their specific words back to them. Never be generic.`;
 
   try {
     const response = await fetch('/api/generate', {
@@ -1188,10 +1298,13 @@ Tone: warm but direct. Intelligent but not academic. This person is a profession
     parseAndDisplayResults(text);
     showScreen('results');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    sendAuditEmail(ks, text).catch(e => console.warn('Email non-critical:', e.message));
   } catch (err) {
     clearInterval(lt);
     useFallbackResults(ks);
     showScreen('results');
+    // Still send email with fallback data
+    sendAuditEmail(ks, '').catch(e => console.warn('Email send failed:', e.message));
   }
 }
 
@@ -1205,6 +1318,9 @@ function parseAndDisplayResults(text) {
   const res      = extract('RESONANCE_GAP');
   const protocol = extract('PROTOCOL');
   const behav    = extract('BEHAVIOUR');
+
+  // Store in state for email
+  state.aiResults = { diagnosis: diag, resonanceGap: res, protocol, behaviour: behav };
 
   document.getElementById('result-diagnosis').innerHTML  = diag     || fallbackDiagnosis();
   document.getElementById('result-resonance').innerHTML  = res      || '';
@@ -1250,15 +1366,68 @@ function showError(id) {
 function hideError(id) {
   document.getElementById(id).style.display = 'none';
 }
+async function sendAuditEmail(ks, rawText) {
+  const now = new Date();
+  const timestamp = now.toLocaleString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+  });
+
+  const contextSummary = state.path === 'baseline'
+    ? 'Participant described their current reality as: "' + (state.responses.reality || '') + '". Stability rating: ' + (state.responses.stability || '—') + '/5.'
+    : 'Situation: "' + (state.responses.situation || '') + '". Sphere of responsibility: "' + (state.responses.role || '') + '".';
+
+  const auditData = {
+    coach:            state.coach || 'Not specified',
+    timestamp,
+    path:             state.path,
+    participantFirst: state.firstName,
+    participantLast:  state.lastName,
+    participantEmail: state.email,
+    scores:           state.scores,
+    kineticState:     ks.name,
+    kineticSubtitle:  ks.subtitle,
+    responses: {
+      reality:     state.responses.reality    || '',
+      stability:   state.responses.stability  || '',
+      situation:   state.responses.situation  || '',
+      role:        state.responses.role       || '',
+      teach:       state.responses.teach      || '',
+      need:        state.responses.need       || '',
+      commitment:  state.responses.commitment || '',
+    },
+    aiResults: state.aiResults || {},
+    contextSummary,
+  };
+
+  const response = await fetch('/api/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ auditData }),
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error('Email API returned ' + response.status + ': ' + (err.error || 'unknown'));
+  }
+  return response.json();
+}
+
 function restartAudit() {
   state.path = null;
+  state.coach = '';
   state.scores = {};
   state.responses = {};
   state.firstName = '';
   state.lastName = '';
   state.email = '';
   state.kineticState = '';
+  state.aiResults = {};
   clearAllFields();
+  // Reset coach selector UI
+  document.querySelectorAll('.coach-card').forEach(c => c.classList.remove('selected'));
+  const coachBtn = document.getElementById('btn-coach-continue');
+  if (coachBtn) { coachBtn.disabled = true; coachBtn.style.opacity = '.4'; coachBtn.style.cursor = 'not-allowed'; }
   document.getElementById('progressBar').style.display = 'none';
   showScreen('welcome');
   window.scrollTo({ top: 0 });
