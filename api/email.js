@@ -90,7 +90,7 @@ export default async function handler(req, res) {
             { email: 'scnaessens@gmail.com' },
           ],
         }],
-        from: { email: 'audit@send.focusacademy.global', name: 'Kinetic Audit' },
+        from: { email: 'audit@focusacademy.global', name: 'Kinetic Audit' },
         subject: 'Kinetic Audit — ' + participantFirst + ' ' + participantLast + ' — ' + kineticState + ' — ' + timestamp,
         content: [{ type: 'text/html', value: htmlEmail }],
       }),
