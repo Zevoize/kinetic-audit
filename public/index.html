@@ -398,6 +398,80 @@ input::placeholder { color: #7a7a72; }
 }
 .btn-ghost:hover { border-color: var(--gold-dim); color: var(--gold); }
 
+/* ── WELCOME CONTEXT SECTION ── */
+.welcome-divider {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, transparent, rgba(200,168,75,.3), transparent);
+  margin: 40px auto 0;
+}
+.welcome-context {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  margin-top: 40px;
+  width: 100%;
+  max-width: 560px;
+}
+.welcome-rosette-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+#welcome-rosette {
+  border-radius: 50%;
+  box-shadow: 0 0 40px rgba(200,168,75,.12), 0 0 80px rgba(200,168,75,.05);
+  display: block;
+}
+.welcome-rosette-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.wr-label {
+  position: absolute;
+  font-family: 'Jost', sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .7;
+}
+.wr-earth { color: #7ed87e; top: 4px;  left: 50%; transform: translateX(-50%); }
+.wr-air   { color: #7eb4f0; top: 50%;  right: 2px; transform: translateY(-50%); }
+.wr-water { color: #7ed4e8; bottom: 4px; left: 50%; transform: translateX(-50%); }
+.wr-fire  { color: #f0906a; top: 50%;  left: 2px;  transform: translateY(-50%); }
+.welcome-copy {
+  text-align: left;
+  width: 100%;
+}
+.welcome-p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--cream-dim);
+  margin-bottom: 18px;
+}
+.welcome-p em {
+  color: var(--gold);
+  font-style: italic;
+}
+.welcome-p-final {
+  color: var(--cream);
+  font-size: 18px;
+  line-height: 1.75;
+  margin-top: 8px;
+  border-top: 1px solid rgba(200,168,75,.15);
+  padding-top: 20px;
+}
+.wc-earth { color: #7ed87e; }
+.wc-air   { color: #7eb4f0; }
+.wc-water { color: #7ed4e8; }
+.wc-fire  { color: #f0906a; }
+
 /* ── COACH SELECTOR ── */
 .coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 auto 40px;max-width:480px;}
 .coach-card{
@@ -678,7 +752,31 @@ input::placeholder { color: #7a7a72; }
     <h1 class="headline">What does this<br><em>moment</em> require<br>of you?</h1>
     <p class="subtext">A guided micro-growth cycle built on the Focusynthesis® model. Not a quiz — a mirror. In four stages, you will read your current elemental state and take one concrete step forward.</p>
     <p class="subtext" style="font-size:13px; margin-bottom:0;">Takes approximately 6–8 minutes.</p>
-    <button class="btn-primary" onclick="showScreen('coach')" style="margin-top:36px;">Begin the Audit</button>
+
+    <!-- ── CONTEXT SECTION ── -->
+    <div class="welcome-divider"></div>
+
+    <div class="welcome-context">
+      <div class="welcome-rosette-wrap">
+        <canvas id="welcome-rosette" width="200" height="200"></canvas>
+        <div class="welcome-rosette-labels">
+          <span class="wr-label wr-earth">Earth</span>
+          <span class="wr-label wr-air">Air</span>
+          <span class="wr-label wr-water">Water</span>
+          <span class="wr-label wr-fire">Fire</span>
+        </div>
+      </div>
+
+      <div class="welcome-copy">
+        <p class="welcome-p">Let me show you something.</p>
+        <p class="welcome-p">Imagine a Foucault Pendulum — the kind that hangs in science museums, swinging freely from a single fixed point. That fixed point at the top is everything. When it is stable, the pendulum traces a perfect pattern over time — a rosette. When it wavers, there is no pattern. Only noise.</p>
+        <p class="welcome-p">In this model, you are that pivot point. The <em>Self</em>. And the pendulum swings through four elemental forces: <span class="wc-earth">Earth</span>, <span class="wc-air">Air</span>, <span class="wc-water">Water</span>, and <span class="wc-fire">Fire</span>. Stability. Clarity. Resonance. Action.</p>
+        <p class="welcome-p">There are two ways to move it. The first is deliberate — cycling through all four forces in sequence, building momentum that compounds over time. The second is reactive — when you notice you are stuck, you identify which force is missing and restore precisely that.</p>
+        <p class="welcome-p welcome-p-final">Most models tell you what to do. This one tells you what is missing in you right now.<br>That is a different question entirely.</p>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="showScreen('coach')" style="margin-top:48px;">Begin the Audit</button>
   </div>
 
   <!-- ══ SCREEN: COACH SELECTOR ══ -->
@@ -1460,6 +1558,166 @@ function restartAudit() {
   showScreen('welcome');
   window.scrollTo({ top: 0 });
 }
+
+// ══════════════════════════════════════════════
+//  WELCOME ROSETTE ANIMATION
+// ══════════════════════════════════════════════
+(function initWelcomeRosette() {
+  var canvas = document.getElementById('welcome-rosette');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = 200, H = 200;
+  canvas.width = W; canvas.height = H;
+
+  // Physics — Belgium latitude 51°N, slow contemplative speed
+  var LAT_DEG = 51;
+  var omegaF = Math.sin(LAT_DEG * Math.PI / 180) * (1 / 14.3);
+  var R = W * 0.38;
+  var speed = 0.4;
+  var t = 0;
+  var loopDuration = (2 * Math.PI) / omegaF; // one full rosette cycle
+
+  // Elemental colours matching the app palette
+  var ELEMENTS = ['#3d6b3d', '#4a6090', '#2d6070', '#8b3030'];
+
+  function lerpColor(a, b, f) {
+    var pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+    var r = Math.round(((pa >> 16) & 255) + (((pb >> 16) & 255) - ((pa >> 16) & 255)) * f);
+    var g = Math.round(((pa >> 8) & 255) + (((pb >> 8) & 255) - ((pa >> 8) & 255)) * f);
+    var bv = Math.round((pa & 255) + ((pb & 255) - (pa & 255)) * f);
+    return 'rgb(' + r + ',' + g + ',' + bv + ')';
+  }
+
+  function strokeColor(time) {
+    var full = loopDuration;
+    var phase = ((time % full) / full + 1) % 1;
+    var seg = phase * 4, i = Math.floor(seg) % 4, j = (i + 1) % 4, f = seg - Math.floor(seg);
+    return lerpColor(ELEMENTS[i], ELEMENTS[j], f);
+  }
+
+  function pos(time) {
+    return {
+      x: R * Math.cos(time) * Math.cos(omegaF * time),
+      y: R * Math.cos(time) * Math.sin(omegaF * time)
+    };
+  }
+
+  // Off-screen canvas for the persistent trail
+  var off = document.createElement('canvas');
+  off.width = W; off.height = H;
+  var offCtx = off.getContext('2d');
+
+  var lastTime = null;
+  var totalT = 0;
+
+  function draw(ts) {
+    if (!lastTime) lastTime = ts;
+    var dt = Math.min((ts - lastTime) / 1000, 0.05);
+    lastTime = ts;
+
+    // Advance physics
+    var steps = 20, inc = speed * dt / steps;
+    offCtx.save();
+    offCtx.translate(W / 2, H / 2);
+    for (var i = 0; i < steps; i++) {
+      var p0 = pos(t);
+      t += inc;
+      totalT += inc;
+      var p1 = pos(t);
+      offCtx.beginPath();
+      offCtx.moveTo(p0.x, p0.y);
+      offCtx.lineTo(p1.x, p1.y);
+      offCtx.strokeStyle = strokeColor(t);
+      offCtx.lineWidth = 1.4;
+      offCtx.globalAlpha = 0.85;
+      offCtx.stroke();
+    }
+    offCtx.restore();
+
+    // Fade trail gently — slow fade for contemplative build-up
+    offCtx.fillStyle = 'rgba(10,10,8,0.004)';
+    offCtx.fillRect(0, 0, W, H);
+
+    // Background
+    ctx.clearRect(0, 0, W, H);
+    var bg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W/2);
+    bg.addColorStop(0, '#161412');
+    bg.addColorStop(0.7, '#111008');
+    bg.addColorStop(1, '#0a0a08');
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, W/2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Clip to circle
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, W/2 - 1, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(off, 0, 0);
+    ctx.restore();
+
+    // Outer ring
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, W/2 - 1, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(200,168,75,0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Bob
+    var p = pos(t);
+    ctx.save();
+    ctx.translate(W/2 + p.x, H/2 + p.y);
+    var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 10);
+    glow.addColorStop(0, 'rgba(226,201,126,0.9)');
+    glow.addColorStop(0.4, 'rgba(200,168,75,0.4)');
+    glow.addColorStop(1, 'rgba(176,144,64,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(0, 0, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#f5f0e4';
+    ctx.beginPath();
+    ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // String
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(W/2, H/2);
+    ctx.lineTo(W/2 + p.x, H/2 + p.y);
+    ctx.strokeStyle = 'rgba(200,168,75,0.15)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    ctx.restore();
+
+    // Pivot
+    ctx.save();
+    ctx.translate(W/2, H/2);
+    ctx.fillStyle = 'rgba(200,168,75,0.5)';
+    ctx.beginPath();
+    ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Soft loop reset — when one full rosette is traced, slowly fade and restart
+    if (totalT >= loopDuration * 0.98) {
+      // Fade the off-screen canvas quickly to restart gracefully
+      offCtx.fillStyle = 'rgba(10,10,8,0.035)';
+      offCtx.fillRect(0, 0, W, H);
+      if (totalT >= loopDuration * 1.1) {
+        totalT = 0;
+        t = 0;
+        offCtx.clearRect(0, 0, W, H);
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+})();
 </script>
 </body>
 </html>
