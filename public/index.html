@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Kinetic Audit — Focus Academy Global</title>
+<title>The Kinetic Audit - Focus Academy Global</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -456,10 +456,10 @@ input::placeholder { color: #7a7a72; }
   margin: 0 auto;
 }
 .welcome-p {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 17px;
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
   font-weight: 300;
-  line-height: 1.8;
+  line-height: 1.75;
   color: var(--cream-dim);
   margin-bottom: 18px;
   text-align: center;
@@ -472,8 +472,10 @@ input::placeholder { color: #7a7a72; }
   font-style: italic;
 }
 .welcome-p-final {
+  font-family: 'Jost', sans-serif;
   color: var(--cream);
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 300;
   line-height: 1.75;
   margin-top: 8px;
   border-top: 1px solid rgba(200,168,75,.15);
@@ -763,7 +765,7 @@ input::placeholder { color: #7a7a72; }
     </svg>
     <div class="eyebrow">The Kinetic Audit</div>
     <h1 class="headline">What does this<br><em>moment</em> require<br>of you?</h1>
-    <p class="subtext">A guided micro-growth cycle built on the Focusynthesis® model. Not a quiz — a mirror. In four stages, you will read your current elemental state and take one concrete step forward.</p>
+    <p class="subtext">A guided micro-growth cycle built on the Focusynthesis® model. Not a quiz - a mirror. In four stages, you will read your current elemental state and take one concrete step forward.</p>
     <p class="subtext" style="font-size:13px; margin-bottom:0;">Takes approximately 6–8 minutes.</p>
 
     <!-- ── CONTEXT SECTION ── -->
@@ -782,10 +784,10 @@ input::placeholder { color: #7a7a72; }
 
       <div class="welcome-copy">
         <p class="welcome-p">Let me show you something.</p>
-        <p class="welcome-p">Imagine a Foucault Pendulum — the kind that hangs in science museums, swinging freely from a single fixed point. That fixed point at the top is everything. When it is stable, the pendulum traces a perfect pattern over time — a rosette.</p>
+        <p class="welcome-p">Imagine a Foucault Pendulum - the kind that hangs in science museums, swinging freely from a single fixed point. That fixed point at the top is everything. When it is stable, the pendulum traces a perfect pattern over time - a rosette.</p>
         <p class="welcome-p">In this model, you are that pivot point. The <em>Self</em>. And the pendulum swings through four elemental forces: <span class="wc-earth">Earth</span>, <span class="wc-air">Air</span>, <span class="wc-water">Water</span>, and <span class="wc-fire">Fire</span>. Stability. Clarity. Resonance. Action.</p>
-        <p class="welcome-p">There are two ways to move it. The first is deliberate — cycling through all four forces in sequence, building momentum that compounds over time. The second is reactive — when you notice you are stuck, you identify which force is missing and restore precisely that.</p>
-        <p class="welcome-p welcome-p-final">Most models tell you what to do. This one reads what is actually present — and what the moment is asking for.<br>That is a different question entirely.</p>
+        <p class="welcome-p">There are two ways to move it. The first is deliberate - cycling through all four forces in sequence, building momentum that compounds over time. The second is reactive - when you notice you are stuck, you identify which force is missing and restore precisely that.</p>
+        <p class="welcome-p welcome-p-final">Most models tell you what to do. This one reads what is actually present - and what the moment is asking for.<br>That is a different question entirely.</p>
       </div>
     </div>
 
@@ -821,7 +823,7 @@ input::placeholder { color: #7a7a72; }
       <div class="path-card" onclick="choosePath('baseline')">
         <span class="path-icon">◎</span>
         <div class="path-name">The Kinetic Baseline</div>
-        <div class="path-desc">I want to understand my overall momentum right now — not a specific crisis, but my general operational state.</div>
+        <div class="path-desc">I want to understand my overall momentum right now - not a specific crisis, but my general operational state.</div>
       </div>
       <div class="path-card" onclick="choosePath('lens')">
         <span class="path-icon">◈</span>
@@ -831,13 +833,13 @@ input::placeholder { color: #7a7a72; }
     </div>
   </div>
 
-  <!-- ══ SCREEN 2: STAGE 1 — GROUND (Earth) ══ -->
+  <!-- ══ SCREEN 2: STAGE 1 - GROUND (Earth) ══ -->
   <div class="screen" id="screen-stage1">
     <div class="stage-header">
       <div class="stage-pip pip-earth">F</div>
       <div class="stage-label-wrap">
         <div class="stage-element">Stage 1 · Earth · Find Your Ground</div>
-        <div class="stage-name">Ground — The Honest Anchor</div>
+        <div class="stage-name">Ground - The Honest Anchor</div>
       </div>
     </div>
 
@@ -858,12 +860,12 @@ input::placeholder { color: #7a7a72; }
       </div>
       <div class="question-block">
         <div class="question-context">Name your reality</div>
-        <div class="question-text">In one or two sentences, how would you honestly describe where you are right now — professionally and personally?</div>
+        <div class="question-text">In one or two sentences, how would you honestly describe where you are right now - professionally and personally?</div>
         <textarea id="q-baseline-reality" placeholder="Be specific, not aspirational. What is actually true today?" rows="4"></textarea>
       </div>
       <div class="question-block">
         <div class="question-context">Rate your stability</div>
-        <div class="question-text">Right now, I feel operationally grounded — I know what I'm doing, why I'm doing it, and my boundaries are intact.</div>
+        <div class="question-text">Right now, I feel operationally grounded - I know what I'm doing, why I'm doing it, and my boundaries are intact.</div>
         <div class="scale">
           <button class="scale-btn" onclick="selectScale(this,'q-baseline-ground')">1</button>
           <button class="scale-btn" onclick="selectScale(this,'q-baseline-ground')">2</button>
@@ -885,7 +887,7 @@ input::placeholder { color: #7a7a72; }
       </div>
       <div class="question-block">
         <div class="question-context">Name your role in it</div>
-        <div class="question-text">As the operator in this situation — what are you actually responsible for here? What is yours to move?</div>
+        <div class="question-text">As the operator in this situation - what are you actually responsible for here? What is yours to move?</div>
         <textarea id="q-lens-role" placeholder="Focus on what is within your sphere of influence." rows="3"></textarea>
       </div>
     </div>
@@ -894,16 +896,16 @@ input::placeholder { color: #7a7a72; }
     <p class="error-msg" id="err-s1">Please complete all questions above before continuing.</p>
   </div>
 
-  <!-- ══ SCREEN 3: STAGE 2 — SEE (Air) ══ -->
+  <!-- ══ SCREEN 3: STAGE 2 - SEE (Air) ══ -->
   <div class="screen" id="screen-stage2">
     <div class="stage-header">
       <div class="stage-pip pip-air">O</div>
       <div class="stage-label-wrap">
         <div class="stage-element">Stage 2 · Air · Open Your Mind</div>
-        <div class="stage-name">See — The Elevation</div>
+        <div class="stage-name">See - The Elevation</div>
       </div>
     </div>
-    <p class="subtext" style="text-align:left; margin:0 0 24px; font-size:14px;">Rise above the noise for a moment. Rate each statement as it actually is right now — not as you wish it were.</p>
+    <p class="subtext" style="text-align:left; margin:0 0 24px; font-size:14px;">Rise above the noise for a moment. Rate each statement as it actually is right now - not as you wish it were.</p>
 
     <div id="stage2-questions"></div>
 
@@ -911,25 +913,25 @@ input::placeholder { color: #7a7a72; }
     <p class="error-msg" id="err-s2">Please rate all statements before continuing.</p>
   </div>
 
-  <!-- ══ SCREEN 4: STAGE 3 — FEEL (Water) ══ -->
+  <!-- ══ SCREEN 4: STAGE 3 - FEEL (Water) ══ -->
   <div class="screen" id="screen-stage3">
     <div class="stage-header">
       <div class="stage-pip pip-water">C</div>
       <div class="stage-label-wrap">
         <div class="stage-element">Stage 3 · Water · Channel Your Flow</div>
-        <div class="stage-name">Feel — The Resonance Check</div>
+        <div class="stage-name">Feel - The Resonance Check</div>
       </div>
     </div>
 
     <div class="question-block">
       <div class="question-context">Before strategy, before solutions</div>
-      <div class="question-text" id="s3-q1-text">If this moment — exactly as it is — were trying to teach you something, what would it be teaching you?</div>
+      <div class="question-text" id="s3-q1-text">If this moment - exactly as it is - were trying to teach you something, what would it be teaching you?</div>
       <textarea id="q-feel-teach" placeholder="Trust the first answer that arrives. Don't edit it." rows="4"></textarea>
     </div>
 
     <div class="question-block">
       <div class="question-context">The felt sense</div>
-      <div class="question-text" id="s3-q2-text">Set aside what you think you should do. What does this moment feel like it actually needs — from you, right now?</div>
+      <div class="question-text" id="s3-q2-text">Set aside what you think you should do. What does this moment feel like it actually needs - from you, right now?</div>
       <textarea id="q-feel-need" placeholder="Not the logical answer. The felt one." rows="3"></textarea>
     </div>
 
@@ -937,21 +939,21 @@ input::placeholder { color: #7a7a72; }
     <p class="error-msg" id="err-s3">Please complete both questions above.</p>
   </div>
 
-  <!-- ══ SCREEN 5: STAGE 4 — MOVE (Fire) ══ -->
+  <!-- ══ SCREEN 5: STAGE 4 - MOVE (Fire) ══ -->
   <div class="screen" id="screen-stage4">
     <div class="stage-header">
       <div class="stage-pip pip-fire">U</div>
       <div class="stage-label-wrap">
         <div class="stage-element">Stage 4 · Fire · Unleash Your Will</div>
-        <div class="stage-name">Move — The Micro-Ignition</div>
+        <div class="stage-name">Move - The Micro-Ignition</div>
       </div>
     </div>
 
-    <p class="subtext" style="text-align:left; margin:0 0 24px; font-size:14px; color:var(--cream-dim);">This is not a question. This is a commitment. The most important thing you will do in this audit is name one irreversible action — small enough that you cannot talk yourself out of it, specific enough that you will know when you have done it.</p>
+    <p class="subtext" style="text-align:left; margin:0 0 24px; font-size:14px; color:var(--cream-dim);">This is not a question. This is a commitment. The most important thing you will do in this audit is name one irreversible action - small enough that you cannot talk yourself out of it, specific enough that you will know when you have done it.</p>
 
     <div class="commitment-block">
       <div class="commitment-prompt">Within the next 24 hours, I will take this one specific action:</div>
-      <div class="commitment-constraint">Small. Concrete. Irreversible. Not a plan — a move.</div>
+      <div class="commitment-constraint">Small. Concrete. Irreversible. Not a plan - a move.</div>
       <textarea id="q-commitment" placeholder="Example: I will send that email I have been postponing. I will block two hours tomorrow morning for the strategy I have been avoiding. I will have the conversation I have been deferring." rows="4"></textarea>
     </div>
 
@@ -970,7 +972,7 @@ input::placeholder { color: #7a7a72; }
         <circle cx="50" cy="50" r="4" fill="#c8a84b" opacity=".5"/>
       </svg>
       <h2 class="gate-title">Your reading is ready.</h2>
-      <p class="gate-sub">Enter your details to receive your personalised Kinetic State — including your reading, your resonance gap, and your accountability mirror — delivered to your inbox and displayed immediately.</p>
+      <p class="gate-sub">Enter your details to receive your personalised Kinetic State - including your reading, your resonance gap, and your accountability mirror - delivered to your inbox and displayed immediately.</p>
       <div class="name-row">
         <input type="text" id="email-first" placeholder="First name">
         <input type="text" id="email-last" placeholder="Last name">
@@ -1034,7 +1036,7 @@ input::placeholder { color: #7a7a72; }
 
     <div class="conversion-strip">
       <h3 class="conversion-title">This was one swing of the pendulum.</h3>
-      <p class="conversion-sub">The Kinetic Self gives you the complete operating system — the seasonal cycle, the Focusynthesis® model, and the architecture for growth that compounds over time.</p>
+      <p class="conversion-sub">The Kinetic Self gives you the complete operating system - the seasonal cycle, the Focusynthesis® model, and the architecture for growth that compounds over time.</p>
       <div class="cta-row">
         <a href="https://www.focusacademy.global" class="btn-cta-primary" target="_blank">Get The Kinetic Self</a>
         <a href="https://www.focusacademy.global/connect" class="btn-cta-secondary" target="_blank">Book a Kinetic Conversation</a>
@@ -1119,7 +1121,7 @@ function clearAllFields() {
   if (s2) s2.innerHTML = '';
   // Reset stage 3 question text to baseline default
   var s3q = document.getElementById('s3-q1-text');
-  if (s3q) s3q.textContent = 'If this moment — exactly as it is — were trying to teach you something, what would it be teaching you?';
+  if (s3q) s3q.textContent = 'If this moment - exactly as it is - were trying to teach you something, what would it be teaching you?';
   // Hide error messages
   document.querySelectorAll('.error-msg').forEach(function(e) {
     e.style.display = 'none';
@@ -1164,7 +1166,7 @@ function choosePath(path) {
   const s3q = document.getElementById('s3-q1-text');
   if (path !== 'lens') {
     // Baseline: reset to general text
-    s3q.textContent = 'If this moment — exactly as it is — were trying to teach you something, what would it be teaching you?';
+    s3q.textContent = 'If this moment - exactly as it is - were trying to teach you something, what would it be teaching you?';
   }
   // Lens: Stage 3 Q1 is dynamically rewritten in goToStage2 using their actual situation text
   showScreen('stage1');
@@ -1189,8 +1191,8 @@ function goToStage2() {
     var short = sit.length > 60 ? sit.substring(0, 57) + '…' : sit;
     var q1 = document.getElementById('s3-q1-text');
     var q2 = document.getElementById('s3-q2-text');
-    if (q1) q1.textContent = 'If this specific situation — ' + short + ' — were trying to teach you something, what would it be teaching you?';
-    if (q2) q2.textContent = 'Set aside what you think you should do. What does this situation feel like it actually needs — from you, right now?';
+    if (q1) q1.textContent = 'If this specific situation - ' + short + ' - were trying to teach you something, what would it be teaching you?';
+    if (q2) q2.textContent = 'Set aside what you think you should do. What does this situation feel like it actually needs - from you, right now?';
   }
   if (!valid) { showError('err-s1'); return; }
   hideError('err-s1');
@@ -1356,26 +1358,26 @@ async function generateResults() {
     : 'Specific situation: "' + state.responses.situation + '". Sphere of responsibility: "' + state.responses.role + '".';
 
   const modeInstruction = isInRhythm
-    ? 'OUTPUT MODE: RHYTHM. This participant is in active Focusynthesis® — strong scores across all four elements, no significant deficit, high momentum self-rating. Do NOT write repair language or prescribe a protocol as if something is broken. Celebrate what is in motion. Name the leading elemental force. Help them be intentional about sustaining and deepening the current cycle.'
+    ? 'OUTPUT MODE: RHYTHM. This participant is in active Focusynthesis® - strong scores across all four elements, no significant deficit, high momentum self-rating. Do NOT write repair language or prescribe a protocol as if something is broken. Celebrate what is in motion. Name the leading elemental force. Help them be intentional about sustaining and deepening the current cycle.'
     : 'OUTPUT MODE: REPAIR. There is a genuine elemental deficit. Write with warmth and precision. Name what is missing, describe the lived experience of that deficit using their own words, and give a specific protocol to restore momentum.';
 
   const lensLine = state.path === 'lens' ? '\n- Situation: "' + state.responses.situation + '"' : '';
 
   const diagInstruction = isInRhythm
     ? '2-3 sentences. Name the elemental pattern that is strongest and what it signals. Use their actual words to show you have read their specific situation. Frame this as deliberate operation, not luck. Do not suggest anything is missing or needs fixing.'
-    : '2-3 sentences. Name the missing element and the Kinetic State. Describe the lived experience from the inside — not clinical observation but the felt reality. Use their actual words and reference something specific from their context.';
+    : '2-3 sentences. Name the missing element and the Kinetic State. Describe the lived experience from the inside - not clinical observation but the felt reality. Use their actual words and reference something specific from their context.';
 
   const gapInstruction = isInRhythm
-    ? '2-3 sentences. When someone is in full rotation, the resonance gap is small — what they feel they need is what they are already providing. Name this absence of gap precisely. This is a moment of recognition, not correction.'
-    : '2-3 sentences. Describe the gap between what they said this moment needs (Stage 3) and what their elemental pattern shows they have been doing instead. Be precise — this is the most revealing section. The resonance gap is where growth begins.';
+    ? '2-3 sentences. When someone is in full rotation, the resonance gap is small - what they feel they need is what they are already providing. Name this absence of gap precisely. This is a moment of recognition, not correction.'
+    : '2-3 sentences. Describe the gap between what they said this moment needs (Stage 3) and what their elemental pattern shows they have been doing instead. Be precise - this is the most revealing section. The resonance gap is where growth begins.';
 
   const protocolInstruction = isInRhythm
-    ? '2-3 sentences. Do not prescribe a repair. Name the natural next phase of their cycle — which element wants to come forward next in a healthy seasonal rotation. Give one intentional action to deepen the current cycle. Frame this as the difference between reactive and deliberate Focusynthesis®.'
-    : '3-4 sentences. Name the specific protocol for the deficit — Anchor (Earth), Oxygen (Air), Flux (Water), Ignition (Fire). Explain why this element first. Give one concrete micro-action for the next hour or two, distinct from their 24-hour commitment. Specific, not aspirational.';
+    ? '2-3 sentences. Do not prescribe a repair. Name the natural next phase of their cycle - which element wants to come forward next in a healthy seasonal rotation. Give one intentional action to deepen the current cycle. Frame this as the difference between reactive and deliberate Focusynthesis®.'
+    : '3-4 sentences. Name the specific protocol for the deficit - Anchor (Earth), Oxygen (Air), Flux (Water), Ignition (Fire). Explain why this element first. Give one concrete micro-action for the next hour or two, distinct from their 24-hour commitment. Specific, not aspirational.';
 
   const prompt = `You are writing a personalised Kinetic Audit result for ${state.firstName}. You work for Focus Academy Global, trained in the Focusynthesis\u00AE growth model by St\u00E9phane Browet and S\u00E9verine Naessens.
 
-THE MODEL: The Self (S) is the conscious pivot — the operator wielding four elemental forces: Earth (stability, boundaries, containment), Air (strategic clarity, elevation above noise), Water (intuition, human resonance, purpose connection), Fire (execution, initiation, converting potential to impact). Focusynthesis\u00AE is the growth mechanism: the Self grows by deliberately cycling through all four elements. The pendulum is always in motion — there is no static destination, only the quality of the swing. The rosette is the visible trace of growth over time.
+THE MODEL: The Self (S) is the conscious pivot - the operator wielding four elemental forces: Earth (stability, boundaries, containment), Air (strategic clarity, elevation above noise), Water (intuition, human resonance, purpose connection), Fire (execution, initiation, converting potential to impact). Focusynthesis\u00AE is the growth mechanism: the Self grows by deliberately cycling through all four elements. The pendulum is always in motion - there is no static destination, only the quality of the swing. The rosette is the visible trace of growth over time.
 
 ${modeInstruction}
 
@@ -1400,14 +1402,14 @@ PARTICIPANT DATA:
 - What they feel this needs from them: \"${state.responses.need}\"
 - Their 24-hour commitment: \"${state.responses.commitment}\"
 
-LANGUAGE CONSTRAINTS — non-negotiable:
+LANGUAGE CONSTRAINTS - non-negotiable:
 Never use: 'balance' or 'balanced' (use: rhythm, full rotation, all four elements active, the pendulum swinging freely)
 Never use: 'flow' unless naming the Water element specifically (use: momentum, kinetic energy, the cycle producing, conversion)
 Never use: 'journey' (use: cycle, rotation, swing, the rosette forming)
 Never use: 'healing', 'fix', 'fixing', 'toxic'
 Never frame a strong score as secretly a weakness
-Never mention numbers, scores, or ratings in your output — translate everything into human language
-Never say things like 'your Earth scored 7' or 'with a Fire of 4' — describe what is present or absent in words only
+Never mention numbers, scores, or ratings in your output - translate everything into human language
+Never say things like 'your Earth scored 7' or 'with a Fire of 4' - describe what is present or absent in words only
 
 Write exactly four sections labelled in square brackets:
 
@@ -1421,7 +1423,7 @@ ${gapInstruction}
 ${protocolInstruction}
 
 [BEHAVIOUR]
-1-2 sentences. Name something precise about HOW they engaged with this audit — the specificity of their writing, the nature of their commitment, how they described their situation. Frame it as an invitation to notice their own operating style. In rhythm or in repair, this should feel like a mirror, not a verdict.
+1-2 sentences. Name something precise about HOW they engaged with this audit - the specificity of their writing, the nature of their commitment, how they described their situation. Frame it as an invitation to notice their own operating style. In rhythm or in repair, this should feel like a mirror, not a verdict.
 
 Tone: warm, direct, intelligent. Speak as an equal who has seen something true. This person is a professional or leader. Use their specific words back to them. Never be generic.`;
 
@@ -1482,16 +1484,16 @@ function useFallbackResults(ks) {
 function fallbackDiagnosis(ks) {
   if (!ks) ks = { name: state.kineticState };
   const map = {
-    'The Drift':     `Your system is currently running low on Earth — the mass and containment that keeps momentum directed rather than scattered. You have energy, ideas, perhaps even clarity, but without firm operational boundaries the force dissipates before it becomes traction. The question is not what to add. It is what to stop letting through.`,
-    'The Smolder':   `You are working hard — perhaps harder than you ever have — but the strategic altitude is missing. Air is what allows you to see the full territory rather than just the ground beneath your feet. Right now you are in the smoke, not above it. The effort is real. The direction needs calibrating.`,
-    'The Drought':   `Your system has become dry — efficient, perhaps, even productive, but disconnected from the human resonance that makes effort meaningful. You may be hiding behind structure, data, or perfectionism. Water is not a luxury. It is the lubricant that keeps every other element from grinding itself to dust.`,
-    'The Freeze':    `You have the foundation. You have the clarity. You may even have the emotional alignment. What you are missing is the spark — the irreversible first move that breaks the static friction. This is not a strategy problem. It is a momentum problem. The analysis is complete. The launch sequence needs to fire.`,
-    'The Geyser':    `Running on Water and Fire without Earth or Air produces a powerful but uncontained energy — reactive, passionate, explosive in bursts. The force is real. The containment and direction are what this system needs most urgently.`,
-    'The Monolith':  `Earth and Air are both present — structure and strategy — but without Water and Fire the system becomes a stone pillar. Immovable. Cold. Strategically correct but humanly frozen. Something needs to move.`,
-    'The Grindstone':`Earth and Fire are both strong — you have structure and you are taking action — but without Air and Water you are moving without seeing and executing without feeling. Blind friction. The effort is real. The lubrication and elevation are missing.`,
-    'The Mist':      `Air and Water are both present — vision and intuition — but without Earth and Fire the system produces no physical work. Beautiful ideas, deep feelings, and no traction. The potential is real. What it needs is mass and heat.`,
-    'The Firestorm': `Air and Fire are blazing — strategic and executive — but without Earth and Water the system is burning without a chassis or coolant. This produces extraordinary output in the short term and catastrophic exhaustion in the medium term. Something needs to slow down before it runs out.`,
-    'The Mud':       `Earth and Water are both strong — stable and emotionally intelligent — but without Air and Fire the system sinks under its own weight. Connection and safety are present. Direction and spark are what this moment is asking for.`,
+    'The Drift':     `Your system is currently running low on Earth - the mass and containment that keeps momentum directed rather than scattered. You have energy, ideas, perhaps even clarity, but without firm operational boundaries the force dissipates before it becomes traction. The question is not what to add. It is what to stop letting through.`,
+    'The Smolder':   `You are working hard - perhaps harder than you ever have - but the strategic altitude is missing. Air is what allows you to see the full territory rather than just the ground beneath your feet. Right now you are in the smoke, not above it. The effort is real. The direction needs calibrating.`,
+    'The Drought':   `Your system has become dry - efficient, perhaps, even productive, but disconnected from the human resonance that makes effort meaningful. You may be hiding behind structure, data, or perfectionism. Water is not a luxury. It is the lubricant that keeps every other element from grinding itself to dust.`,
+    'The Freeze':    `You have the foundation. You have the clarity. You may even have the emotional alignment. What you are missing is the spark - the irreversible first move that breaks the static friction. This is not a strategy problem. It is a momentum problem. The analysis is complete. The launch sequence needs to fire.`,
+    'The Geyser':    `Running on Water and Fire without Earth or Air produces a powerful but uncontained energy - reactive, passionate, explosive in bursts. The force is real. The containment and direction are what this system needs most urgently.`,
+    'The Monolith':  `Earth and Air are both present - structure and strategy - but without Water and Fire the system becomes a stone pillar. Immovable. Cold. Strategically correct but humanly frozen. Something needs to move.`,
+    'The Grindstone':`Earth and Fire are both strong - you have structure and you are taking action - but without Air and Water you are moving without seeing and executing without feeling. Blind friction. The effort is real. The lubrication and elevation are missing.`,
+    'The Mist':      `Air and Water are both present - vision and intuition - but without Earth and Fire the system produces no physical work. Beautiful ideas, deep feelings, and no traction. The potential is real. What it needs is mass and heat.`,
+    'The Firestorm': `Air and Fire are blazing - strategic and executive - but without Earth and Water the system is burning without a chassis or coolant. This produces extraordinary output in the short term and catastrophic exhaustion in the medium term. Something needs to slow down before it runs out.`,
+    'The Mud':       `Earth and Water are both strong - stable and emotionally intelligent - but without Air and Fire the system sinks under its own weight. Connection and safety are present. Direction and spark are what this moment is asking for.`,
   };
   return map[ks.name] || `Your elemental pattern has been read. The Kinetic Self model has identified where your momentum is blocked and what the system needs to restore its natural rhythm.`;
 }
@@ -1513,7 +1515,7 @@ async function sendAuditEmail(ks, rawText) {
   });
 
   const contextSummary = state.path === 'baseline'
-    ? 'Participant described their current reality as: "' + (state.responses.reality || '') + '". Stability rating: ' + (state.responses.stability || '—') + '/5.'
+    ? 'Participant described their current reality as: "' + (state.responses.reality || '') + '". Stability rating: ' + (state.responses.stability || '-') + '/5.'
     : 'Situation: "' + (state.responses.situation || '') + '". Sphere of responsibility: "' + (state.responses.role || '') + '".';
 
   const auditData = {
@@ -1582,7 +1584,7 @@ function restartAudit() {
   var W = 200, H = 200;
   canvas.width = W; canvas.height = H;
 
-  // Physics — Belgium latitude 51°N, slow contemplative speed
+  // Physics - Belgium latitude 51°N, slow contemplative speed
   var LAT_DEG = 51;
   var omegaF = Math.sin(LAT_DEG * Math.PI / 180) * (1 / 14.3);
   var R = W * 0.38;
@@ -1647,7 +1649,7 @@ function restartAudit() {
     }
     offCtx.restore();
 
-    // Fade trail gently — slow fade for contemplative build-up
+    // Fade trail gently - slow fade for contemplative build-up
     offCtx.fillStyle = 'rgba(10,10,8,0.004)';
     offCtx.fillRect(0, 0, W, H);
 
@@ -1714,7 +1716,7 @@ function restartAudit() {
     ctx.fill();
     ctx.restore();
 
-    // Soft loop reset — when one full rosette is traced, slowly fade and restart
+    // Soft loop reset - when one full rosette is traced, slowly fade and restart
     if (totalT >= loopDuration * 0.98) {
       // Fade the off-screen canvas quickly to restart gracefully
       offCtx.fillStyle = 'rgba(10,10,8,0.035)';
