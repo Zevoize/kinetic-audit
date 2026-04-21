@@ -1,12 +1,6 @@
 // api/analyse.js
 // Focusynthesis® Kinetic Analyst — Serverless API endpoint
-// Deploy to Vercel alongside the existing api/generate.js proxy
-
-const Anthropic = require('@anthropic-ai/sdk');
-
-// ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
-// Full Focusynthesis® model definition + report structure + constraints
-// This never leaves the server.
+// Gebruikt native fetch — geen extra npm packages nodig
 
 const SYSTEM_PROMPT = `# FOCUSYNTHESIS® KINETIC COACH — SESSIE ANALYSE
 # Focus Academy Global — Internal use only
@@ -77,7 +71,7 @@ When the operator is trapped in a Shadow State, Mode 2 activates. The operator d
 
 ### Shadow States (Primary — Mode 2)
 
-The Drift — Missing Earth. Running on Air + Fire + Water without grounding. Infinite potential, no traction. Signs: plans in the head not on paper, commitments not kept, everything started nothing finished, reactive rather than proactive.
+The Drift — Missing Earth. Running on Air + Fire + Water without grounding. Signs: plans in the head not on paper, commitments not kept, everything started nothing finished, reactive rather than proactive.
 
 The Freeze — Missing Fire. Running on Earth + Air + Water without execution. Signs: perfect preparation but no action, endless analysis, static friction, the first step never taken.
 
@@ -124,16 +118,12 @@ A system cannot be elevated strategically or ignited executively if it is not fi
 
 Produce the analysis in exactly the following nine sections. Use these exact Dutch headings.
 
----
-
 ### SECTION 1: Intakecontext
 
-If [INTAKE] is provided: summarise the key intake data directly relevant to the session. Focus on stated patterns, values under pressure, goals, and hidden context (life domains outside work). Present each intake insight as:
+If [INTAKE] is provided: summarise the key intake data directly relevant to the session. Present each intake insight as:
 ▼ Intake: *[quote or paraphrase in italics]*
 
 If no intake is provided, write exactly: *Geen intakecontext beschikbaar voor deze sessie. Diagnose gebaseerd uitsluitend op het transcript.*
-
----
 
 ### SECTION 2: Elementaire Diagnose — Kinetic State
 
@@ -142,28 +132,22 @@ Open with one diagnostic badge line:
 
 Then 3-5 sentences explaining the diagnosis.
 
-Then present five rows (use labels like E/A/W/F/KS):
+Then present five rows:
 - Earth — [diagnostic label] — [evidence from transcript]
 - Air — [diagnostic label] — [evidence from transcript]
 - Water — [diagnostic label] — [evidence from transcript]
 - Fire — [diagnostic label] — [evidence from transcript]
 - Kinetic Self — [diagnostic label] — [evidence from transcript]
 
-For duo or group coaching: diagnose the collective unit first. Note individual divergences only where diagnostically relevant. Do not profile individuals without intake context.
-
----
+For duo or group coaching: diagnose the collective unit first. Note individual divergences only where diagnostically relevant.
 
 ### SECTION 3: Sessie Mapping — Hoe de Elementen Werden Ingezet
 
-Map the coach's deployment of each element chronologically through the session. Use sub-headings per element or session phase. For each intervention identify: which element, which protocol if Mode 2, whether Order of Operations was respected, whether it landed.
-
----
+Map the coach's deployment of each element chronologically. Use sub-headings per element or session phase. For each intervention identify: which element, which protocol if Mode 2, whether Order of Operations was respected, whether it landed.
 
 ### SECTION 4: Overkoepelende Dynamiek
 
 Patterns only visible when the session is read as a whole. If genuinely present: analyse in 200-350 words. If not present: one sentence and move on. Do not force this section.
-
----
 
 ### SECTION 5: Toetsing aan het Focusynthesis® Model
 
@@ -172,45 +156,25 @@ Structured conformity analysis. Each row uses exactly one of these markers:
 ⚠️ — **[Label]** — [Description]
 ■ — **[Label]** — [Description]
 
-Always include these items where applicable:
-- Mode identification
-- Order of Operations
-- Protocol matching
-- Kinetic Self protection (behaviour vs. person)
-- Rosette moment
-- Water handling (deficit vs. suppression)
-
-Be honest. Missed moments are reported as such.
-
----
+Always include: Mode identification, Order of Operations, Protocol matching, Kinetic Self protection, Rosette moment, Water handling.
 
 ### SECTION 6: Bijzondere Momenten
 
-Up to two moments deserving separate attention — diagnostically rich, unusually well-executed, or missed opportunities. Each gets a bold sub-heading and max 120 words. Do not manufacture moments.
-
----
+Up to two moments deserving separate attention. Each gets a bold sub-heading and max 120 words. Do not manufacture moments.
 
 ### SECTION 7: Chronologische Vergelijking
 
-Only when [PREVIOUS_REPORTS] is provided. If so: produce a comparison table (text-based, one row per session: Session # / Date / Kinetic State / Dominant element / Key moment) and a short interpretive paragraph (max 80 words).
-
-If no previous data: omit this section entirely with no mention.
-
----
+Only when [PREVIOUS_REPORTS] is provided. If no previous data: omit this section entirely.
 
 ### SECTION 8: Ontwikkelrichtingen
 
-Exactly six development directions. Each grounded in what actually happened in this session. Format:
+Exactly six development directions. Format:
 **Richting N — [Title]**
 [2-4 sentence description]
-
-Distribute across: model deepening (IP), practitioner tools, book applications (Tier 1 or Tier 2 IMPACT), future coaching priorities.
 
 ---
 
 ## NOMENCLATURE — HARD CONSTRAINTS
-
-Use only these exact terms. Never translate, adapt, or paraphrase:
 
 Elements: Earth, Air, Water, Fire
 Pivot: Kinetic Self (NEVER "S-as", "S-axis", "pivot-as")
@@ -220,55 +184,40 @@ Modes: Mode 1, Mode 2
 Shadow States: The Drift, The Freeze, The Smolder, The Drought, The Grindstone, The Mist, The Firestorm, The Mud, Absolute Zero, Inertia
 Protocols: Anchor Protocol, Oxygen Protocol, Flux Protocol, Ignition Sequence
 Axes: Axis of Being (Earth + Water), Axis of Engagement (Air + Fire)
-Trajectory: Focusynthesis® cycle
 Sequence rule: Order of Operations
 
-FORBIDDEN: S-as, S-axis, ankerprotocol, zuurstofprotocol, fluxprotocol, schaduwstaat, groeimechanisme, or any other translated version.
+FORBIDDEN: S-as, S-axis, ankerprotocol, zuurstofprotocol, fluxprotocol, schaduwstaat, or any translated version.
 
 ---
 
 ## BOUNDARIES
 
-On coachee personal dynamics: without intake, do not speculate about personal history, psychological profile, or life circumstances beyond what the transcript directly evidences.
+Without intake: do not speculate about personal history beyond what the transcript directly evidences.
+Compound Shadow States: only in internal/practitioner documents (these reports qualify).
+Duo coaching: collective unit is primary. Individual profiling requires individual intake.
+Rosette moments: contextualise — in a one-hour session, not every missed moment is a genuine gap.
+Length: 1800–2800 words. Match depth to session. Do not pad. Do not truncate.`;
 
-On compound Shadow States: use only in internal/practitioner documents. These reports are internal documents, so compound states may be used when evidence is clear and diagnosis is precise.
-
-On duo/group coaching: the collective unit is the primary subject. Individual profiling requires individual intake context.
-
-On Rosette moments: assess whether present or missed. Contextualise: in a one-hour session with a full agenda, not every theoretically possible intervention is realistically executable. Distinguish genuine gaps from reasonable trade-offs.
-
-On length: a full report is 1800–2800 words. Match depth to the session. Do not pad. Do not truncate.`;
-
-// ─── USER MESSAGE BUILDER ─────────────────────────────────────────────────────
 function buildUserMessage({ client, coach, sessionNum, date, context, intake, transcript, prevReports }) {
   const parts = [];
-
-  if (client)     parts.push(`[CLIENT]\n${client}`);
-  if (coach)      parts.push(`[COACH]\n${coach}`);
-  if (sessionNum) parts.push(`[SESSION_NUMBER]\n${sessionNum}`);
-  if (date)       parts.push(`[DATE]\n${date}`);
-  if (context)    parts.push(`[CONTEXT]\n${context}`);
-  if (intake)     parts.push(`[INTAKE]\n${intake}`);
+  if (client)      parts.push(`[CLIENT]\n${client}`);
+  if (coach)       parts.push(`[COACH]\n${coach}`);
+  if (sessionNum)  parts.push(`[SESSION_NUMBER]\n${sessionNum}`);
+  if (date)        parts.push(`[DATE]\n${date}`);
+  if (context)     parts.push(`[CONTEXT]\n${context}`);
+  if (intake)      parts.push(`[INTAKE]\n${intake}`);
   if (prevReports) parts.push(`[PREVIOUS_REPORTS]\n${prevReports}`);
-
   parts.push(`[SESSION_${sessionNum || 'N'}]\n${transcript}`);
-
   parts.push(`\nProduce the full Focusynthesis® session analysis report in Dutch following the nine-section structure defined in your instructions. Be precise, honest, and grounded in the transcript evidence.`);
-
   return parts.join('\n\n---\n\n');
 }
 
-// ─── HANDLER ──────────────────────────────────────────────────────────────────
 module.exports = async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { client, coach, sessionNum, date, context, intake, transcript, prevReports } = req.body || {};
 
@@ -276,41 +225,49 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Transcript ontbreekt of is te kort.' });
   }
 
-  // Transcript length guard — roughly 120k chars max to stay within context
-  const transcriptTrimmed = transcript.slice(0, 120000);
-
-  const client_ = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const userMessage = buildUserMessage({
+    client, coach, sessionNum, date, context,
+    intake:      intake      ? intake.slice(0, 20000)      : '',
+    transcript:  transcript.slice(0, 120000),
+    prevReports: prevReports ? prevReports.slice(0, 30000) : '',
+  });
 
   try {
-    const userMessage = buildUserMessage({
-      client, coach, sessionNum, date, context,
-      intake: intake ? intake.slice(0, 20000) : '',
-      transcript: transcriptTrimmed,
-      prevReports: prevReports ? prevReports.slice(0, 30000) : '',
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type':      'application/json',
+        'x-api-key':         process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model:      'claude-opus-4-5',
+        max_tokens: 8000,
+        system:     SYSTEM_PROMPT,
+        messages:   [{ role: 'user', content: userMessage }],
+      }),
     });
 
-    const response = await client_.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 6000,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userMessage }],
-    });
+    if (!response.ok) {
+      const errBody = await response.text();
+      console.error('Anthropic API error:', response.status, errBody);
+      return res.status(502).json({ error: `API fout ${response.status}: ${errBody.slice(0, 200)}` });
+    }
 
-    const report = response.content
+    const data = await response.json();
+    const report = (data.content || [])
       .filter(b => b.type === 'text')
       .map(b => b.text)
       .join('');
 
     return res.status(200).json({
       report,
-      inputTokens:  response.usage?.input_tokens,
-      outputTokens: response.usage?.output_tokens,
+      inputTokens:  data.usage?.input_tokens,
+      outputTokens: data.usage?.output_tokens,
     });
 
   } catch (err) {
-    console.error('Analyse API error:', err);
-    return res.status(500).json({
-      error: err.message || 'Interne serverfout bij het genereren van de analyse.',
-    });
+    console.error('Analyse handler error:', err);
+    return res.status(500).json({ error: err.message || 'Interne serverfout.' });
   }
 };
