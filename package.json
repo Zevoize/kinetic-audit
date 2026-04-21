@@ -2,5 +2,8 @@
   "name": "kinetic-audit",
   "version": "1.0.0",
   "description": "The Kinetic Audit — Focus Academy Global",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "docx": "^8.5.0"
+  }
 }
