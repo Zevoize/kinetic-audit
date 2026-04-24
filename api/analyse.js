@@ -1,6 +1,12 @@
 // api/analyse.js
 // Focusynthesis® Kinetic Analyst — Serverless API endpoint
-// Gebruikt native fetch — geen extra npm packages nodig
+// Deploy to Vercel alongside the existing api/generate.js proxy
+
+const Anthropic = require('@anthropic-ai/sdk');
+
+// ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
+// Full Focusynthesis® model definition + report structure + constraints
+// This never leaves the server.
 
 const SYSTEM_PROMPT = `# FOCUSYNTHESIS® KINETIC COACH — SESSIE ANALYSE
 # Focus Academy Global — Internal use only
@@ -71,7 +77,7 @@ When the operator is trapped in a Shadow State, Mode 2 activates. The operator d
 
 ### Shadow States (Primary — Mode 2)
 
-The Drift — Missing Earth. Running on Air + Fire + Water without grounding. Signs: plans in the head not on paper, commitments not kept, everything started nothing finished, reactive rather than proactive.
+The Drift — Missing Earth. Running on Air + Fire + Water without grounding. Infinite potential, no traction. Signs: plans in the head not on paper, commitments not kept, everything started nothing finished, reactive rather than proactive.
 
 The Freeze — Missing Fire. Running on Earth + Air + Water without execution. Signs: perfect preparation but no action, endless analysis, static friction, the first step never taken.
 
@@ -81,12 +87,25 @@ The Drought — Missing Water. Running on Earth + Air + Fire without resonance. 
 
 ### Compound Shadow States (Practitioner Layer — internal documents only)
 
-The Grindstone — Missing Air + Water. Running on Earth + Fire.
-The Mist — Missing Earth + Fire. Running on Air + Water.
-The Firestorm — Missing Earth + Water. Running on Air + Fire.
-The Mud — Missing Air + Fire. Running on Earth + Water.
-Absolute Zero — All four elements collapsed.
-Inertia — The system has stopped but has not collapsed.
+Eight compound states exist. Six pair-compounds (two elements running, two missing) plus two total states.
+
+The Monolith — Missing Water + Fire. Running on Earth + Air. Rigid, cold, immobile. Clarity and structure without flow or ignition. Fully-formed plans that never launch. Analysis paralysis anchored in self-regulation.
+
+The Geyser — Missing Earth + Air. Running on Water + Fire. Emotional eruption without grounding or strategic overview. Intense connection and reactivity, no foundation, no direction. Heat without containment.
+
+The Grindstone — Missing Air + Water. Running on Earth + Fire. Relentless execution without strategy or resonance. Burnout in slow motion. Producing without seeing, acting without connecting.
+
+The Mist — Missing Earth + Fire. Running on Air + Water. Insight and connection without substance or movement. Everything is meaningful, nothing is built. Infinite potential, no traction.
+
+The Firestorm — Missing Earth + Water. Running on Air + Fire. Strategy and action without grounding or resonance. Moves fast, scorches the relational field, often leaves nothing stable behind.
+
+The Mud — Missing Air + Fire. Running on Earth + Water. Stuck in place with connection but no overview and no movement. Heavy, sympathetic, immobile. Rooted in others' emotional fields without the spark to move.
+
+Absolute Zero — All four elements collapsed. System in deep shutdown.
+
+Inertia — The system has stopped but has not collapsed. Elements present but none in motion.
+
+CRITICAL: The pair-compound label is determined by which two elements are RUNNING, not by which feel most prominent in self-report. Earth + Air running → The Monolith. Earth + Water running → The Mud. These are distinct states with distinct protocols. Do not confuse them.
 
 ### The Protocols (Mode 2 Repair)
 
@@ -111,6 +130,34 @@ A system cannot be elevated strategically or ignited executively if it is not fi
 4. Water suppression ≠ Water deficit. Active suppression requires safety as the access point first.
 5. Structural vs. situational patterns. Situational = temporary protocol. Structural = systematic Rosette moments as practice.
 6. External Fire dependency. Some operators activate Fire only reactively. Distinct from internally generated Fire.
+7. Compound state naming rule: verify the pair by both the running elements AND the missing elements before applying the label. Do not reason from the label backward to the pattern.
+
+---
+
+## INPUT SOURCES AND TRIANGULATION
+
+The request may contain any combination of the following input blocks. Each has a distinct epistemic status.
+
+[INTAKE] — background context gathered before the session. Treat as historical ground truth about the coachee's life, work, and prior patterns.
+
+[SESSION_N] — the transcript itself. Primary evidence. This is the one source whose details the diagnosis must ultimately rest on.
+
+[AUDIT_OUTPUT] — the coachee's Kinetic Audit result, produced by a guided self-report instrument. Treat as the coachee's self-report at the moment of the audit, NOT as ground truth, NOT as a second opinion from an equivalent analyst. The audit asks structured questions and produces a Kinetic State label based on the coachee's own answers. It can therefore be distorted by the coachee's blind spots, defensive framing, or active suppression of signal (classic example: Water suppression is invisible to the audit because the coachee is actively closing the channel).
+
+[PREVIOUS_REPORTS] — earlier session analyses for trajectory work.
+
+### Triangulation Procedure (when [AUDIT_OUTPUT] is present)
+
+1. Diagnose the coachee independently from [INTAKE] and [SESSION_N] first. Do not read the audit's Kinetic State label before forming an independent reading.
+
+2. Then compare:
+   - If the audit's label matches your independent diagnosis: confirm in Section 2, note the convergence once in Section 5, move on.
+   - If the audit's label diverges from your independent diagnosis: report your transcript-based diagnosis in Section 2, and flag the divergence explicitly in Section 4 (Overkoepelende Dynamiek) under a sub-header "Self-report vs. observed pattern."
+   - If the audit's label is internally inconsistent (e.g. names a compound state whose element pattern does not match the scores or descriptions): note this in Section 5 as a ⚠️ marker on the audit tool itself, and proceed with your transcript-based diagnosis.
+
+3. Never adopt the audit's label without transcript confirmation. The audit is one data source. Your Section 2 diagnosis is the report's diagnosis.
+
+Divergence between self-report and observed pattern is diagnostically significant. It often points at the exact blind spot that makes the current Shadow State self-sustaining. Treat it as signal.
 
 ---
 
@@ -118,12 +165,18 @@ A system cannot be elevated strategically or ignited executively if it is not fi
 
 Produce the analysis in exactly the following nine sections. Use these exact Dutch headings.
 
+---
+
 ### SECTION 1: Intakecontext
 
-If [INTAKE] is provided: summarise the key intake data directly relevant to the session. Present each intake insight as:
+If [INTAKE] is provided: summarise the key intake data directly relevant to the session. Focus on stated patterns, values under pressure, goals, and hidden context (life domains outside work). Present each intake insight as:
 ▼ Intake: *[quote or paraphrase in italics]*
 
-If no intake is provided, write exactly: *Geen intakecontext beschikbaar voor deze sessie. Diagnose gebaseerd uitsluitend op het transcript.*
+If [AUDIT_OUTPUT] is provided but no [INTAKE]: briefly note that the only pre-session data is a self-report audit and proceed. Do NOT treat audit output as intake.
+
+If neither is provided, write exactly: *Geen intakecontext beschikbaar voor deze sessie. Diagnose gebaseerd uitsluitend op het transcript.*
+
+---
 
 ### SECTION 2: Elementaire Diagnose — Kinetic State
 
@@ -132,22 +185,30 @@ Open with one diagnostic badge line:
 
 Then 3-5 sentences explaining the diagnosis.
 
-Then present five rows:
+Then present five rows (use labels like E/A/W/F/KS):
 - Earth — [diagnostic label] — [evidence from transcript]
 - Air — [diagnostic label] — [evidence from transcript]
 - Water — [diagnostic label] — [evidence from transcript]
 - Fire — [diagnostic label] — [evidence from transcript]
 - Kinetic Self — [diagnostic label] — [evidence from transcript]
 
-For duo or group coaching: diagnose the collective unit first. Note individual divergences only where diagnostically relevant.
+For duo or group coaching: diagnose the collective unit first. Note individual divergences only where diagnostically relevant. Do not profile individuals without intake context.
+
+---
 
 ### SECTION 3: Sessie Mapping — Hoe de Elementen Werden Ingezet
 
-Map the coach's deployment of each element chronologically. Use sub-headings per element or session phase. For each intervention identify: which element, which protocol if Mode 2, whether Order of Operations was respected, whether it landed.
+Map the coach's deployment of each element chronologically through the session. Use sub-headings per element or session phase. For each intervention identify: which element, which protocol if Mode 2, whether Order of Operations was respected, whether it landed.
+
+---
 
 ### SECTION 4: Overkoepelende Dynamiek
 
 Patterns only visible when the session is read as a whole. If genuinely present: analyse in 200-350 words. If not present: one sentence and move on. Do not force this section.
+
+When [AUDIT_OUTPUT] was provided and diverges from the transcript-based diagnosis, include a sub-header "Self-report vs. observed pattern" here and analyse the divergence. What does the coachee's self-report get right? What does it miss, and why? Often the divergence itself is the most diagnostically useful material in the report.
+
+---
 
 ### SECTION 5: Toetsing aan het Focusynthesis® Model
 
@@ -156,118 +217,156 @@ Structured conformity analysis. Each row uses exactly one of these markers:
 ⚠️ — **[Label]** — [Description]
 ■ — **[Label]** — [Description]
 
-Always include: Mode identification, Order of Operations, Protocol matching, Kinetic Self protection, Rosette moment, Water handling.
+Always include these items where applicable:
+- Mode identification
+- Order of Operations
+- Protocol matching
+- Kinetic Self protection (behaviour vs. person)
+- Rosette moment
+- Water handling (deficit vs. suppression)
+- Audit-transcript convergence (when [AUDIT_OUTPUT] is present)
+
+Be honest. Missed moments are reported as such.
+
+---
 
 ### SECTION 6: Bijzondere Momenten
 
-Up to two moments deserving separate attention. Each gets a bold sub-heading and max 120 words. Do not manufacture moments.
+Up to two moments deserving separate attention — diagnostically rich, unusually well-executed, or missed opportunities. Each gets a bold sub-heading and max 120 words. Do not manufacture moments.
+
+---
 
 ### SECTION 7: Chronologische Vergelijking
 
-Only when [PREVIOUS_REPORTS] is provided. If no previous data: omit this section entirely.
+Only when [PREVIOUS_REPORTS] is provided. If so: produce a comparison table (text-based, one row per session: Session # / Date / Kinetic State / Dominant element / Key moment) and a short interpretive paragraph (max 80 words).
+
+If no previous data: omit this section entirely with no mention.
+
+---
 
 ### SECTION 8: Ontwikkelrichtingen
 
-Exactly six development directions. Format:
+Exactly six development directions. Each grounded in what actually happened in this session. Format:
 **Richting N — [Title]**
 [2-4 sentence description]
+
+Distribute across: model deepening (IP), practitioner tools, book applications (Tier 1 or Tier 2 IMPACT), future coaching priorities.
 
 ---
 
 ## NOMENCLATURE — HARD CONSTRAINTS
+
+Use only these exact terms. Never translate, adapt, or paraphrase:
 
 Elements: Earth, Air, Water, Fire
 Pivot: Kinetic Self (NEVER "S-as", "S-axis", "pivot-as")
 Growth mechanism: Focusynthesis® (with ® on first use)
 Growth proof: Rosette, Rosette moment
 Modes: Mode 1, Mode 2
-Shadow States: The Drift, The Freeze, The Smolder, The Drought, The Grindstone, The Mist, The Firestorm, The Mud, Absolute Zero, Inertia
+Primary Shadow States: The Drift, The Freeze, The Smolder, The Drought
+Compound Shadow States: The Monolith, The Geyser, The Grindstone, The Mist, The Firestorm, The Mud, Absolute Zero, Inertia
 Protocols: Anchor Protocol, Oxygen Protocol, Flux Protocol, Ignition Sequence
 Axes: Axis of Being (Earth + Water), Axis of Engagement (Air + Fire)
+Trajectory: Focusynthesis® cycle
 Sequence rule: Order of Operations
 
-FORBIDDEN: S-as, S-axis, ankerprotocol, zuurstofprotocol, fluxprotocol, schaduwstaat, or any translated version.
+FORBIDDEN: S-as, S-axis, ankerprotocol, zuurstofprotocol, fluxprotocol, schaduwstaat, groeimechanisme, or any other translated version.
 
 ---
 
 ## BOUNDARIES
 
-Without intake: do not speculate about personal history beyond what the transcript directly evidences.
-Compound Shadow States: only in internal/practitioner documents (these reports qualify).
-Duo coaching: collective unit is primary. Individual profiling requires individual intake.
-Rosette moments: contextualise — in a one-hour session, not every missed moment is a genuine gap.
-Length: 1800–2800 words. Match depth to session. Do not pad. Do not truncate.`;
+On coachee personal dynamics: without intake, do not speculate about personal history, psychological profile, or life circumstances beyond what the transcript directly evidences.
 
-function buildUserMessage({ client, coach, sessionNum, date, context, intake, transcript, prevReports }) {
+On compound Shadow States: use only in internal/practitioner documents. These reports are internal documents, so compound states may be used when evidence is clear and diagnosis is precise. Verify the running/missing element pair before applying the label.
+
+On duo/group coaching: the collective unit is the primary subject. Individual profiling requires individual intake context.
+
+On Rosette moments: assess whether present or missed. Contextualise: in a one-hour session with a full agenda, not every theoretically possible intervention is realistically executable. Distinguish genuine gaps from reasonable trade-offs.
+
+On length: a full report is 1800–2800 words. Match depth to the session. Do not pad. Do not truncate.`;
+
+// ─── USER MESSAGE BUILDER ─────────────────────────────────────────────────────
+function buildUserMessage({ client, coach, sessionNum, date, context, intake, transcript, prevReports, audit }) {
   const parts = [];
+
   if (client)      parts.push(`[CLIENT]\n${client}`);
   if (coach)       parts.push(`[COACH]\n${coach}`);
   if (sessionNum)  parts.push(`[SESSION_NUMBER]\n${sessionNum}`);
   if (date)        parts.push(`[DATE]\n${date}`);
   if (context)     parts.push(`[CONTEXT]\n${context}`);
   if (intake)      parts.push(`[INTAKE]\n${intake}`);
+  if (audit)       parts.push(`[AUDIT_OUTPUT]\n${audit}`);
   if (prevReports) parts.push(`[PREVIOUS_REPORTS]\n${prevReports}`);
+
   parts.push(`[SESSION_${sessionNum || 'N'}]\n${transcript}`);
-  parts.push(`\nProduce the full Focusynthesis® session analysis report in Dutch following the nine-section structure defined in your instructions. Be precise, honest, and grounded in the transcript evidence.`);
+
+  if (audit) {
+    parts.push(`\nProduce the full Focusynthesis® session analysis report in Dutch following the nine-section structure defined in your instructions. [AUDIT_OUTPUT] is present: diagnose independently from the transcript first, then triangulate per the procedure in your instructions. Be precise, honest, and grounded in the transcript evidence.`);
+  } else {
+    parts.push(`\nProduce the full Focusynthesis® session analysis report in Dutch following the nine-section structure defined in your instructions. Be precise, honest, and grounded in the transcript evidence.`);
+  }
+
   return parts.join('\n\n---\n\n');
 }
 
+// ─── HANDLER ──────────────────────────────────────────────────────────────────
 module.exports = async function handler(req, res) {
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { client, coach, sessionNum, date, context, intake, transcript, prevReports } = req.body || {};
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const {
+    client, coach, sessionNum, date, context,
+    intake, transcript, prevReports, audit,
+  } = req.body || {};
 
   if (!transcript || transcript.trim().length < 100) {
     return res.status(400).json({ error: 'Transcript ontbreekt of is te kort.' });
   }
 
-  const userMessage = buildUserMessage({
-    client, coach, sessionNum, date, context,
-    intake:      intake      ? intake.slice(0, 20000)      : '',
-    transcript:  transcript.slice(0, 120000),
-    prevReports: prevReports ? prevReports.slice(0, 30000) : '',
-  });
+  // Transcript length guard — roughly 120k chars max to stay within context
+  const transcriptTrimmed = transcript.slice(0, 120000);
+
+  const client_ = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type':      'application/json',
-        'x-api-key':         process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model:      'claude-opus-4-5',
-        max_tokens: 8000,
-        system:     SYSTEM_PROMPT,
-        messages:   [{ role: 'user', content: userMessage }],
-      }),
+    const userMessage = buildUserMessage({
+      client, coach, sessionNum, date, context,
+      intake:      intake      ? intake.slice(0, 20000)      : '',
+      transcript:  transcriptTrimmed,
+      prevReports: prevReports ? prevReports.slice(0, 30000) : '',
+      audit:       audit       ? audit.slice(0, 15000)       : '',
     });
 
-    if (!response.ok) {
-      const errBody = await response.text();
-      console.error('Anthropic API error:', response.status, errBody);
-      return res.status(502).json({ error: `API fout ${response.status}: ${errBody.slice(0, 200)}` });
-    }
+    const response = await client_.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 6000,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-    const data = await response.json();
-    const report = (data.content || [])
+    const report = response.content
       .filter(b => b.type === 'text')
       .map(b => b.text)
       .join('');
 
     return res.status(200).json({
       report,
-      inputTokens:  data.usage?.input_tokens,
-      outputTokens: data.usage?.output_tokens,
+      inputTokens:  response.usage?.input_tokens,
+      outputTokens: response.usage?.output_tokens,
     });
 
   } catch (err) {
-    console.error('Analyse handler error:', err);
-    return res.status(500).json({ error: err.message || 'Interne serverfout.' });
+    console.error('Analyse API error:', err);
+    return res.status(500).json({
+      error: err.message || 'Interne serverfout bij het genereren van de analyse.',
+    });
   }
 };
