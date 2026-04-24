@@ -1,8 +1,7 @@
 // api/analyse.js
 // Focusynthesis® Kinetic Analyst — Serverless API endpoint
 // Deploy to Vercel alongside the existing api/generate.js proxy
-
-const Anthropic = require('@anthropic-ai/sdk');
+// Uses native fetch (no external dependencies) — Node 18+ on Vercel.
 
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 // Full Focusynthesis® model definition + report structure + constraints
@@ -334,8 +333,6 @@ module.exports = async function handler(req, res) {
   // Transcript length guard — roughly 120k chars max to stay within context
   const transcriptTrimmed = transcript.slice(0, 120000);
 
-  const client_ = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
   try {
     const userMessage = buildUserMessage({
       client, coach, sessionNum, date, context,
@@ -345,22 +342,40 @@ module.exports = async function handler(req, res) {
       audit:       audit       ? audit.slice(0, 15000)       : '',
     });
 
-    const response = await client_.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 6000,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userMessage }],
+    const apiResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type':      'application/json',
+        'x-api-key':         process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model:      'claude-sonnet-4-20250514',
+        max_tokens: 6000,
+        system:     SYSTEM_PROMPT,
+        messages:   [{ role: 'user', content: userMessage }],
+      }),
     });
 
-    const report = response.content
+    if (!apiResp.ok) {
+      const errBody = await apiResp.text();
+      console.error('Anthropic API non-OK:', apiResp.status, errBody);
+      return res.status(apiResp.status).json({
+        error: `Anthropic API returned ${apiResp.status}: ${errBody.slice(0, 300)}`,
+      });
+    }
+
+    const data = await apiResp.json();
+
+    const report = (data.content || [])
       .filter(b => b.type === 'text')
       .map(b => b.text)
       .join('');
 
     return res.status(200).json({
       report,
-      inputTokens:  response.usage?.input_tokens,
-      outputTokens: response.usage?.output_tokens,
+      inputTokens:  data.usage?.input_tokens,
+      outputTokens: data.usage?.output_tokens,
     });
 
   } catch (err) {
