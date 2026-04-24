@@ -439,6 +439,11 @@
     </div>
 
     <div class="field">
+      <label class="field-label">Kinetic Audit output <span class="optional-tag">optioneel</span></label>
+      <textarea id="auditOutput" rows="5" placeholder="Plak hier de Kinetic Audit output (e-mailrapport van de coachee). Wordt getrianguleerd met het transcript als self-report, niet als conclusie."></textarea>
+    </div>
+
+    <div class="field">
       <label class="field-label">Vorige rapporten <span class="optional-tag">optioneel</span></label>
       <textarea id="prevReports" rows="4" placeholder="Plak hier een samenvatting van vorige sessierapporten voor longitudinale analyse…"></textarea>
     </div>
@@ -569,6 +574,7 @@ async function analyse() {
     context:     document.getElementById('context').value.trim(),
     intake:      intakeText,
     transcript:  transcriptText,
+    audit:       document.getElementById('auditOutput').value.trim(),
     prevReports: document.getElementById('prevReports').value.trim(),
   };
 
