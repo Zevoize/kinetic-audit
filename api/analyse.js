@@ -139,6 +139,8 @@ A system cannot be elevated strategically or ignited executively if it is not fi
 
 ## INPUT SOURCES AND TRIANGULATION
 
+Note on terminology: throughout this prompt, "audit" and "audit data" refer specifically to the [AUDIT_OUTPUT] data block defined below, which is the pre-session self-report instrument delivered as a separate input. They do NOT refer to a live audit walkthrough that may occur inside the session itself as a coaching intervention. A live walkthrough is part of the transcript and is treated as session content, not as audit data for triangulation, calibration, or convergence purposes.
+
 The request may contain any combination of the following input blocks. Each has a distinct epistemic status.
 
 [INTAKE] — background context gathered before the session. Treat as historical ground truth about the coachee's life, work, and prior patterns.
@@ -239,7 +241,7 @@ Always include these items where applicable:
 - Kinetic Self protection (behaviour vs. person)
 - Rosette moment
 - Water handling (deficit vs. suppression)
-- Audit-transcript convergence (when [AUDIT_OUTPUT] is present)
+- Audit-transcript convergence (only when [AUDIT_OUTPUT] is provided as a separate input block; live walkthroughs in the transcript do not qualify)
 
 Be honest. Missed moments are reported as such.
 
