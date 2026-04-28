@@ -263,11 +263,46 @@ If no previous data: omit this section entirely with no mention.
 
 ### SECTION 8: Ontwikkelrichtingen
 
-Exactly six development directions. Each grounded in what actually happened in this session. Format:
-**Richting N — [Title]**
-[2-4 sentence description]
+Six development directions, organised in two equal fields of three each. Both fields are mandatory and produced in full. Never collapse one field into the other. Never produce more directions in one field at the expense of the other. Each direction must be grounded in concrete evidence from this specific session.
 
-Distribute across: model deepening (IP), practitioner tools, book applications (Tier 1 or Tier 2 IMPACT), future coaching priorities.
+The two fields serve two distinct audiences and exist for two distinct purposes. The analyst always produces both.
+
+**Veld A — Coachpraktijk** (exactly 3 directions)
+
+Audience: the coach (and, indirectly, the coachee). Purpose: what to develop with this client across upcoming sessions, and refinements to the practitioner's craft. Mine the session for: protocol deepening, micro-commitment design, structural patterns to address over time, watch-points for the next session, and coach-craft refinements (timing, language, Order of Operations execution, when to introduce the model and when to hold it back).
+
+Format:
+**Richting A1 — [Title]**
+[2-4 sentence description, tied to specific session evidence]
+
+**Richting A2 — [Title]**
+[2-4 sentence description, tied to specific session evidence]
+
+**Richting A3 — [Title]**
+[2-4 sentence description, tied to specific session evidence]
+
+**Veld B — Bouwwerk: Model, Boek en Certificatie** (exactly 3 directions)
+
+Audience: Stéphane and Séverine as architects of the Focusynthesis® body of work. Purpose: what this session contributes to the wider IP. Mine the session for:
+- Model confirmation or refinement (a compound Shadow State validated in the field, a diagnostic heuristic that proved useful or insufficient, a pattern not yet covered by the model)
+- Book material for *The Kinetic Self* (Tier 1, individual) — vignettes, framings, illustrations of primary Shadow States, examples of the Order of Operations in action
+- Book material for IMPACT (Tier 2, relational — the Kinetic Leader) — leadership-as-operator examples, relational dynamics, presence-as-field illustrations
+- Certification curriculum content — cases, decision points, and worked examples for future practitioners
+- Field validation insights (especially aviation if the session touches that domain, or any high-consequence professional context)
+
+Each direction in this field MUST carry a destination tag in italics after the title.
+
+Format:
+**Richting B1 — [Title]** *(bestemming: [The Kinetic Self / IMPACT / Certificatie / Modelvalidatie / Aviation-validatie / Compound-state-bibliotheek])*
+[2-4 sentence description, tied to specific session evidence and explaining what the destination receives]
+
+**Richting B2 — [Title]** *(bestemming: [...])*
+[2-4 sentence description, tied to specific session evidence]
+
+**Richting B3 — [Title]** *(bestemming: [...])*
+[2-4 sentence description, tied to specific session evidence]
+
+Calibration rule: if a session yields a genuinely modest contribution to one of the two fields, name the contribution modestly — do not inflate. But always produce three directions per field. Every coaching session contributes something to the body of work, even if only as a confirmation of an existing model claim or as a clean case-illustration for the certification curriculum. A modest direction honestly named is more valuable than a forced one with inflated stakes.
 
 ---
 
