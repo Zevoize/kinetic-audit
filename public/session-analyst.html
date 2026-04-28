@@ -537,7 +537,7 @@
 <header>
   <div class="logo-mark"><div class="logo-dot"></div></div>
   <div class="wordmark">Focus Academy Global<br><strong>Kinetic Analyst</strong></div>
-  <div class="tagline">Focusynthesis® — Sessie Rapportage</div>
+  <div class="tagline">Focusynthesis® — Session Reporting</div>
 </header>
 
 <main>
@@ -545,38 +545,38 @@
   <div class="input-panel">
 
     <div>
-      <div class="panel-title">Nieuwe Analyse</div>
-      <div class="panel-subtitle">Laad het transcript en optionele intakecontext. De analyse wordt gegenereerd via het Focusynthesis®-model.</div>
+      <div class="panel-title">New Analysis</div>
+      <div class="panel-subtitle">Load the transcript and optional intake context. The analysis is generated through the Focusynthesis® model.</div>
     </div>
 
     <!-- METADATA -->
     <div class="field-group">
-      <div class="panel-title">Sessiegegevens</div>
+      <div class="panel-title">Session Details</div>
       <div class="field">
         <label class="field-label">Client / Duo</label>
-        <input type="text" id="client" placeholder="bijv. Inès Phlypo of Thibault & Melissa" />
+        <input type="text" id="client" placeholder="e.g. Inès Phlypo or Thibault & Melissa" />
       </div>
       <div class="row-2">
         <div class="field">
           <label class="field-label">Coach</label>
-          <input type="text" id="coach" placeholder="bijv. Stéphane Browet" />
+          <input type="text" id="coach" placeholder="e.g. Stéphane Browet" />
         </div>
         <div class="field">
-          <label class="field-label">Sessie #</label>
-          <input type="number" id="sessionNum" placeholder="bijv. 4" min="1" />
+          <label class="field-label">Session #</label>
+          <input type="number" id="sessionNum" placeholder="e.g. 4" min="1" />
         </div>
       </div>
       <div class="field">
-        <label class="field-label">Datum</label>
-        <input type="text" id="sessionDate" placeholder="bijv. 20 april 2026" />
+        <label class="field-label">Date</label>
+        <input type="text" id="sessionDate" placeholder="e.g. 20 April 2026" />
       </div>
       <div class="field">
-        <label class="field-label">Context <span class="optional-tag">optioneel</span></label>
-        <textarea id="context" placeholder="Bijkomende context voor de analyse (bijv. sector, traject-fase, specifieke focus…)"></textarea>
+        <label class="field-label">Context <span class="optional-tag">optional</span></label>
+        <textarea id="context" placeholder="Additional context for the analysis (e.g. sector, trajectory phase, specific focus…)"></textarea>
       </div>
     </div>
 
-    <div class="divider">Documenten</div>
+    <div class="divider">Documents</div>
 
     <!-- FILE UPLOADS -->
     <div class="field-group">
@@ -584,8 +584,8 @@
         <input type="file" id="intakeFile" accept=".txt,.docx" />
         <div class="upload-icon" id="intakeIcon">I</div>
         <div class="upload-text">
-          <div class="upload-title">Intake document <span class="optional-tag">optioneel</span></div>
-          <div class="upload-sub" id="intakeSub">.txt of .docx — sleep of klik</div>
+          <div class="upload-title">Intake document <span class="optional-tag">optional</span></div>
+          <div class="upload-sub" id="intakeSub">.txt or .docx — drop or click</div>
         </div>
       </div>
 
@@ -593,27 +593,27 @@
         <input type="file" id="transcriptFile" accept=".txt,.docx" />
         <div class="upload-icon" id="transcriptIcon">T</div>
         <div class="upload-text">
-          <div class="upload-title">Sessie transcript <span style="color:var(--gold-dim);font-size:.58rem;">*vereist</span></div>
-          <div class="upload-sub" id="transcriptSub">.txt of .docx — Leexi export</div>
+          <div class="upload-title">Session transcript <span style="color:var(--gold-dim);font-size:.58rem;">*required</span></div>
+          <div class="upload-sub" id="transcriptSub">.txt or .docx — Leexi export</div>
         </div>
       </div>
     </div>
 
     <div class="field">
-      <label class="field-label">Kinetic Audit output <span class="optional-tag">optioneel</span></label>
-      <textarea id="auditOutput" rows="5" placeholder="Plak hier de Kinetic Audit output (e-mailrapport van de coachee). Wordt getrianguleerd met het transcript als self-report, niet als conclusie."></textarea>
+      <label class="field-label">Kinetic Audit output <span class="optional-tag">optional</span></label>
+      <textarea id="auditOutput" rows="5" placeholder="Paste the Kinetic Audit output here (the coachee's email report). Triangulated with the transcript as self-report, not as conclusion."></textarea>
     </div>
 
     <div class="field">
-      <label class="field-label">Vorige rapporten <span class="optional-tag">optioneel</span></label>
-      <textarea id="prevReports" rows="4" placeholder="Plak hier een samenvatting van vorige sessierapporten voor longitudinale analyse…"></textarea>
+      <label class="field-label">Previous reports <span class="optional-tag">optional</span></label>
+      <textarea id="prevReports" rows="4" placeholder="Paste a summary of previous session reports here for longitudinal analysis…"></textarea>
     </div>
 
     <div id="errorMsg" class="error-msg" style="display:none;"></div>
 
     <button class="submit-btn" id="submitBtn" disabled onclick="analyse()">
       <div class="spinner"></div>
-      <span class="btn-label">Analyseer sessie</span>
+      <span class="btn-label">Analyse session</span>
     </button>
 
   </div>
@@ -623,7 +623,7 @@
 
     <div class="output-empty" id="emptyState">
       <div class="pendulum">⌀</div>
-      <p>Laad een transcript en klik op<br><em>Analyseer sessie</em> om te beginnen.</p>
+      <p>Load a transcript and click<br><em>Analyse session</em> to begin.</p>
     </div>
 
     <!-- PROCESSING STATE -->
@@ -638,10 +638,10 @@
         <div class="proc-dot fire"></div>
       </div>
       <div class="proc-status">
-        <div class="proc-phase" id="procPhase">Verwerking</div>
-        <div class="proc-text" id="procText">Even geduld…</div>
+        <div class="proc-phase" id="procPhase">Processing</div>
+        <div class="proc-text" id="procText">One moment…</div>
       </div>
-      <div class="proc-footnote">Focusynthesis® methodologie — verwerking lopende</div>
+      <div class="proc-footnote">Focusynthesis® methodology — analysis in progress</div>
     </div>
 
     <div class="output-content" id="outputContent">
@@ -651,7 +651,7 @@
           <div class="subtitle" id="outputSubtitle">—</div>
         </div>
         <div class="output-actions">
-          <button class="action-btn" onclick="copyReport()">Kopieer</button>
+          <button class="action-btn" onclick="copyReport()">Copy</button>
           <button class="action-btn" id="downloadBtn" onclick="downloadDocx()" style="display:none;">↓ Word</button>
         </div>
       </div>
@@ -659,17 +659,26 @@
 
       <!-- DEBRIEF SECTION -->
       <div class="debrief-section" id="debriefSection" style="display:none;">
-        <div class="debrief-intro">Persoonlijke Debrief</div>
-        <div class="debrief-intro-sub">Een brief in de stem van de coach naar de coachee, opgebouwd vanuit het gesprek en de bovenstaande mapping. Wordt na elke generatie nagelezen voor verzending.</div>
+        <div class="debrief-intro">Personal Debrief</div>
+        <div class="debrief-intro-sub">A letter in the coach's voice to the coachee, built from the conversation and the mapping above. Always reviewed before sending.</div>
 
         <div class="debrief-controls">
+          <div class="field">
+            <label class="field-label">Output language</label>
+            <select id="debriefLanguage">
+              <option value="">— select language —</option>
+              <option value="nl">Nederlands</option>
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+            </select>
+          </div>
           <label class="checkbox-label">
             <input type="checkbox" id="auditInviteChk">
-            <span>Inclusief uitnodiging voor de Kinetic Audit (alleen als die nog niet is gedaan)</span>
+            <span>Include invitation to the Kinetic Audit (only if not yet completed)</span>
           </label>
           <button class="submit-btn" id="debriefBtn" onclick="generateDebrief()">
             <div class="spinner"></div>
-            <span class="btn-label" id="debriefBtnLabel">Genereer debrief</span>
+            <span class="btn-label" id="debriefBtnLabel">Generate debrief</span>
           </button>
         </div>
 
@@ -685,20 +694,20 @@
             <div class="proc-dot fire"></div>
           </div>
           <div class="proc-status">
-            <div class="proc-phase" id="debriefProcPhase">Verwerking</div>
-            <div class="proc-text" id="debriefProcText">Even geduld…</div>
+            <div class="proc-phase" id="debriefProcPhase">Processing</div>
+            <div class="proc-text" id="debriefProcText">One moment…</div>
           </div>
-          <div class="proc-footnote">Focusynthesis® methodologie — debrief lopende</div>
+          <div class="proc-footnote">Focusynthesis® methodology — debrief in progress</div>
         </div>
 
         <div class="debrief-output" id="debriefOutput">
           <div class="debrief-header">
             <div class="debrief-meta">
-              <div class="title" id="debriefTitle">Persoonlijke debrief</div>
+              <div class="title" id="debriefTitle">Personal debrief</div>
               <div class="subtitle" id="debriefSubtitle">—</div>
             </div>
             <div class="output-actions">
-              <button class="action-btn" id="copyDebriefBtn" onclick="copyDebrief()">Kopieer</button>
+              <button class="action-btn" id="copyDebriefBtn" onclick="copyDebrief()">Copy</button>
             </div>
           </div>
           <div class="debrief-body" id="debriefBody"></div>
@@ -710,7 +719,7 @@
 </main>
 
 <footer>
-  <div class="footer-l">Focus Academy Global — Focusynthesis® — Intern gebruik</div>
+  <div class="footer-l">Focus Academy Global — Focusynthesis® — Internal use</div>
   <div class="token-count" id="tokenInfo"></div>
 </footer>
 
@@ -728,7 +737,7 @@ async function readFile(file) {
     return new Promise((res, rej) => {
       const r = new FileReader();
       r.onload = e => res(e.target.result);
-      r.onerror = () => rej(new Error('Leesfout'));
+      r.onerror = () => rej(new Error('Read error'));
       r.readAsText(file);
     });
   } else if (file.name.endsWith('.docx')) {
@@ -740,11 +749,11 @@ async function readFile(file) {
           res(result.value);
         } catch(err) { rej(err); }
       };
-      r.onerror = () => rej(new Error('Leesfout'));
+      r.onerror = () => rej(new Error('Read error'));
       r.readAsArrayBuffer(file);
     });
   }
-  throw new Error('Niet-ondersteund bestandstype');
+  throw new Error('Unsupported file type');
 }
 
 function setupUpload(inputId, zoneId, iconId, subId, onLoad) {
@@ -761,10 +770,10 @@ function setupUpload(inputId, zoneId, iconId, subId, onLoad) {
       onLoad(text);
       zone.classList.add('loaded');
       icon.textContent = '✓';
-      sub.textContent = file.name + ' — geladen';
+      sub.textContent = file.name + ' — loaded';
       checkReady();
     } catch(e) {
-      showError('Fout bij inlezen van ' + file.name + ': ' + e.message);
+      showError('Error reading ' + file.name + ': ' + e.message);
     }
   });
 }
@@ -792,24 +801,24 @@ function showError(msg) {
 // and signal methodological discipline rather than black-box opacity.
 
 const PHASES_ANALYSE = [
-  { phase: 'Lezing', text: 'Het transcript wordt doorgenomen…' },
-  { phase: 'Lezing', text: 'Patronen tekenen zich af in wat er gezegd is…' },
-  { phase: 'Mapping', text: 'De vier elementen worden in kaart gebracht…' },
-  { phase: 'Mapping', text: 'De Kinetic State wordt vastgesteld…' },
-  { phase: 'Toetsing', text: 'Toetsing aan het Focusynthesis®-model…' },
-  { phase: 'Synthese', text: 'Het rapport wordt geschreven…' },
-  { phase: 'Synthese', text: 'Ontwikkelrichtingen worden uitgewerkt…' },
-  { phase: 'Afronding', text: 'Laatste lezing en consistentie-controle…' },
+  { phase: 'Reading', text: 'Reading through the transcript…' },
+  { phase: 'Reading', text: 'Patterns surfacing in what was said…' },
+  { phase: 'Mapping', text: 'Mapping the four elements…' },
+  { phase: 'Mapping', text: 'Establishing the Kinetic State…' },
+  { phase: 'Validation', text: 'Validating against the Focusynthesis® model…' },
+  { phase: 'Synthesis', text: 'Composing the report…' },
+  { phase: 'Synthesis', text: 'Working out development directions…' },
+  { phase: 'Refinement', text: 'Final reading and consistency check…' },
 ];
 
 const PHASES_DEBRIEF = [
-  { phase: 'Herlezing', text: 'Het gesprek wordt opnieuw doorgenomen…' },
-  { phase: 'Herlezing', text: 'Wat er werkelijk gezegd is, wordt teruggevonden…' },
-  { phase: 'Stem', text: 'De stem van de coach wordt opgepakt…' },
-  { phase: 'Compositie', text: 'Een eerste versie vormt zich…' },
-  { phase: 'Compositie', text: 'De mapping wordt in zachte taal verwoord…' },
-  { phase: 'Verfijning', text: 'Toon en ritme worden bijgesteld…' },
-  { phase: 'Afronding', text: 'De brief wordt afgemaakt…' },
+  { phase: 'Rereading', text: 'Going through the conversation again…' },
+  { phase: 'Rereading', text: 'Recovering what was actually said…' },
+  { phase: 'Voice', text: 'Picking up the voice of the coach…' },
+  { phase: 'Composition', text: 'A first version takes shape…' },
+  { phase: 'Composition', text: 'The mapping is rendered in soft language…' },
+  { phase: 'Refinement', text: 'Tone and rhythm being adjusted…' },
+  { phase: 'Closure', text: 'The letter is finished…' },
 ];
 
 let procTimer = null;
@@ -866,12 +875,12 @@ function stopProcessing(mode) {
 
 // ─── ANALYSE ─────────────────────────────────────────────────────────────────
 async function analyse() {
-  if (!transcriptText) return showError('Laad eerst een transcript.');
+  if (!transcriptText) return showError('Load a transcript first.');
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.classList.add('loading');
-  btn.querySelector('.btn-label').textContent = 'Analyseren…';
+  btn.querySelector('.btn-label').textContent = 'Analysing…';
 
   startProcessing('analyse');
 
@@ -895,8 +904,8 @@ async function analyse() {
     });
 
     if (!resp.ok) {
-      const err = await resp.json().catch(() => ({ error: 'Serverfout' }));
-      throw new Error(err.error || 'Serverfout ' + resp.status);
+      const err = await resp.json().catch(() => ({ error: 'Server error' }));
+      throw new Error(err.error || 'Server error ' + resp.status);
     }
 
     const data = await resp.json();
@@ -906,12 +915,12 @@ async function analyse() {
     renderReport(payload, data);
 
   } catch(e) {
-    showError('Analysefout: ' + e.message);
+    showError('Analysis error: ' + e.message);
   } finally {
     stopProcessing('analyse');
     btn.disabled = false;
     btn.classList.remove('loading');
-    btn.querySelector('.btn-label').textContent = 'Analyseer sessie';
+    btn.querySelector('.btn-label').textContent = 'Analyse session';
   }
 }
 
@@ -922,7 +931,7 @@ function renderReport(payload, data) {
   content.classList.add('visible');
 
   const clientLabel = payload.client || 'Client';
-  const sessLabel   = payload.sessionNum ? `Sessie #${payload.sessionNum}` : 'Sessie';
+  const sessLabel   = payload.sessionNum ? `Session #${payload.sessionNum}` : 'Session';
   const dateLabel   = payload.date || '';
 
   document.getElementById('outputTitle').textContent =
@@ -947,7 +956,7 @@ function renderReport(payload, data) {
   const participantName = extractParticipantFirstName(payload.client);
   if (participantName) {
     document.getElementById('debriefBtnLabel').textContent =
-      `Genereer debrief voor ${participantName}`;
+      `Generate debrief for ${participantName}`;
     document.getElementById('debriefSection').style.display = '';
   } else {
     document.getElementById('debriefSection').style.display = 'none';
@@ -1016,7 +1025,7 @@ async function downloadDocx() {
   if (!rawReport) return;
   const btn = document.getElementById('downloadBtn');
   const orig = btn.textContent;
-  btn.textContent = 'Genereren…';
+  btn.textContent = 'Generating…';
   btn.disabled = true;
 
   try {
@@ -1033,8 +1042,8 @@ async function downloadDocx() {
     });
 
     if (!resp.ok) {
-      const err = await resp.json().catch(() => ({ error: 'Serverfout' }));
-      throw new Error(err.error || 'Serverfout ' + resp.status);
+      const err = await resp.json().catch(() => ({ error: 'Server error' }));
+      throw new Error(err.error || 'Server error ' + resp.status);
     }
 
     const blob = await resp.blob();
@@ -1049,12 +1058,12 @@ async function downloadDocx() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    btn.textContent = '✓ Gedownload';
+    btn.textContent = '✓ Downloaded';
     btn.classList.add('success');
     setTimeout(() => { btn.textContent = orig; btn.classList.remove('success'); btn.disabled = false; }, 2500);
 
   } catch(e) {
-    showError('Download mislukt: ' + e.message);
+    showError('Download failed: ' + e.message);
     btn.textContent = orig;
     btn.disabled = false;
   }
@@ -1098,8 +1107,8 @@ function renderDebriefMarkdown(md) {
 
 // ─── DEBRIEF — GENERATE ───────────────────────────────────────────────────────
 async function generateDebrief() {
-  if (!rawReport)      return showError('Genereer eerst een analyse.');
-  if (!transcriptText) return showError('Transcript ontbreekt.');
+  if (!rawReport)      return showError('Generate an analysis first.');
+  if (!transcriptText) return showError('Transcript missing.');
 
   const coachField  = document.getElementById('coach').value.trim();
   const clientField = document.getElementById('client').value.trim();
@@ -1107,13 +1116,18 @@ async function generateDebrief() {
   const coachName = extractCoachSigningName(coachField);
   if (!coachName) {
     return showError(
-      "Kon de coach niet herkennen voor de debrief. Het coachveld moet 'Stéphane' of 'Séverine' bevatten."
+      "Could not recognise the coach for the debrief. The coach field must contain 'Stéphane' or 'Séverine'."
     );
   }
 
   const participantName = extractParticipantFirstName(clientField);
   if (!participantName) {
-    return showError('Cliëntnaam ontbreekt — kan geen aanhef genereren.');
+    return showError('Client name missing — cannot generate salutation.');
+  }
+
+  const outputLanguage = document.getElementById('debriefLanguage').value;
+  if (!outputLanguage) {
+    return showError('Select an output language for the debrief.');
   }
 
   const includeAuditInvitation = document.getElementById('auditInviteChk').checked;
@@ -1124,7 +1138,7 @@ async function generateDebrief() {
 
   btn.disabled = true;
   btn.classList.add('loading');
-  label.textContent = 'Schrijven…';
+  label.textContent = 'Writing…';
 
   startProcessing('debrief');
 
@@ -1135,6 +1149,7 @@ async function generateDebrief() {
       body: JSON.stringify({
         participantName,
         coachName,
+        outputLanguage,
         transcript:    transcriptText,
         analystReport: rawReport,
         intake:        intakeText,
@@ -1143,8 +1158,8 @@ async function generateDebrief() {
     });
 
     if (!resp.ok) {
-      const err = await resp.json().catch(() => ({ error: 'Serverfout' }));
-      throw new Error(err.error || 'Serverfout ' + resp.status);
+      const err = await resp.json().catch(() => ({ error: 'Server error' }));
+      throw new Error(err.error || 'Server error ' + resp.status);
     }
 
     const data = await resp.json();
@@ -1153,9 +1168,9 @@ async function generateDebrief() {
     // Render
     const out = document.getElementById('debriefOutput');
     document.getElementById('debriefTitle').textContent =
-      `Persoonlijke debrief — ${participantName}`;
+      `Personal debrief — ${participantName}`;
     document.getElementById('debriefSubtitle').textContent =
-      `Ondertekend door ${coachName}` + (includeAuditInvitation ? ' · met Audit-uitnodiging' : '');
+      `Signed by ${coachName}` + (includeAuditInvitation ? ' · with Audit invitation' : '');
     document.getElementById('debriefBody').innerHTML = renderDebriefMarkdown(rawDebrief);
     out.classList.add('visible');
     out.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1169,7 +1184,7 @@ async function generateDebrief() {
     }
 
   } catch(e) {
-    showError('Debrief-fout: ' + e.message);
+    showError('Debrief error: ' + e.message);
   } finally {
     stopProcessing('debrief');
     btn.disabled = false;
@@ -1184,10 +1199,10 @@ async function copyDebrief() {
   try {
     await navigator.clipboard.writeText(rawDebrief);
     const btn = document.getElementById('copyDebriefBtn');
-    btn.textContent = 'Gekopieerd ✓';
+    btn.textContent = 'Copied ✓';
     btn.classList.add('success');
-    setTimeout(() => { btn.textContent = 'Kopieer'; btn.classList.remove('success'); }, 2000);
-  } catch(e) { showError('Kopiëren mislukt.'); }
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('success'); }, 2000);
+  } catch(e) { showError('Copy failed.'); }
 }
 </script>
 
