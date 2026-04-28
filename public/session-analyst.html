@@ -422,6 +422,105 @@
   .debrief-body strong{color:var(--text-primary);}
   .debrief-body em{color:var(--text-secondary);}
 
+  /* PROCESSING STATE — analysis & debrief in-flight visualization */
+  .processing-state{
+    flex:1;display:none;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:32px;padding:40px 20px;
+    text-align:center;
+  }
+  .processing-state.active{display:flex;}
+
+  /* Inline variant for the debrief panel — same elements, smaller scale */
+  .processing-state.inline{
+    flex:none;
+    margin-top:24px;padding:32px 20px;
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    gap:20px;
+  }
+  .processing-state.inline .proc-orbit{width:72px;height:72px;}
+  .processing-state.inline .proc-orbit::after{inset:12px;}
+  .processing-state.inline .proc-pivot{width:6px;height:6px;}
+  .processing-state.inline .proc-elements{gap:10px;}
+  .processing-state.inline .proc-dot{width:8px;height:8px;}
+  .processing-state.inline .proc-status{min-height:36px;}
+  .processing-state.inline .proc-footnote{font-size:.55rem;}
+
+  .proc-orbit{
+    position:relative;
+    width:120px;height:120px;
+  }
+  .proc-orbit::before{
+    content:'';position:absolute;inset:0;
+    border-radius:50%;
+    border:1px solid var(--border);
+    border-top-color:var(--gold);
+    animation:proc-spin 2.4s linear infinite;
+  }
+  .proc-orbit::after{
+    content:'';position:absolute;inset:18px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    border-bottom-color:var(--gold-dim);
+    animation:proc-spin 3.6s linear infinite reverse;
+  }
+  @keyframes proc-spin{to{transform:rotate(360deg);}}
+
+  .proc-pivot{
+    position:absolute;top:50%;left:50%;
+    width:8px;height:8px;border-radius:50%;
+    background:var(--gold);
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 12px rgba(200,168,75,.6);
+    animation:proc-pulse 2s ease-in-out infinite;
+  }
+  @keyframes proc-pulse{
+    0%,100%{box-shadow:0 0 12px rgba(200,168,75,.4);}
+    50%{box-shadow:0 0 20px rgba(200,168,75,.8);}
+  }
+
+  .proc-elements{
+    display:flex;gap:14px;align-items:center;
+  }
+  .proc-dot{
+    width:10px;height:10px;border-radius:50%;
+    opacity:.3;
+    animation:proc-dot-pulse 2.4s ease-in-out infinite;
+  }
+  .proc-dot.earth{background:var(--earth);animation-delay:0s;}
+  .proc-dot.air{background:var(--air);animation-delay:.6s;}
+  .proc-dot.water{background:var(--water);animation-delay:1.2s;}
+  .proc-dot.fire{background:var(--fire);animation-delay:1.8s;}
+  @keyframes proc-dot-pulse{
+    0%,100%{opacity:.25;transform:scale(1);}
+    50%{opacity:1;transform:scale(1.3);}
+  }
+
+  .proc-status{
+    display:flex;flex-direction:column;gap:6px;
+    align-items:center;
+    min-height:48px;
+  }
+  .proc-phase{
+    font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--gold-dim);
+  }
+  .proc-text{
+    font-size:.78rem;color:var(--text-secondary);font-style:italic;
+    letter-spacing:.04em;line-height:1.5;
+    transition:opacity .4s ease;
+    max-width:300px;
+  }
+  .proc-text.fading{opacity:0;}
+
+  .proc-footnote{
+    font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--text-muted);
+    margin-top:8px;
+  }
+
   /* RESPONSIVE */
   @media(max-width:768px){
     main{grid-template-columns:1fr;height:auto;}
@@ -527,6 +626,24 @@
       <p>Laad een transcript en klik op<br><em>Analyseer sessie</em> om te beginnen.</p>
     </div>
 
+    <!-- PROCESSING STATE -->
+    <div class="processing-state" id="processingState">
+      <div class="proc-orbit">
+        <div class="proc-pivot"></div>
+      </div>
+      <div class="proc-elements">
+        <div class="proc-dot earth"></div>
+        <div class="proc-dot air"></div>
+        <div class="proc-dot water"></div>
+        <div class="proc-dot fire"></div>
+      </div>
+      <div class="proc-status">
+        <div class="proc-phase" id="procPhase">Verwerking</div>
+        <div class="proc-text" id="procText">Even geduld…</div>
+      </div>
+      <div class="proc-footnote">Focusynthesis® methodologie — verwerking lopende</div>
+    </div>
+
     <div class="output-content" id="outputContent">
       <div class="output-header">
         <div class="output-meta">
@@ -554,6 +671,24 @@
             <div class="spinner"></div>
             <span class="btn-label" id="debriefBtnLabel">Genereer debrief</span>
           </button>
+        </div>
+
+        <!-- INLINE PROCESSING for debrief -->
+        <div class="processing-state inline" id="debriefProcessing">
+          <div class="proc-orbit">
+            <div class="proc-pivot"></div>
+          </div>
+          <div class="proc-elements">
+            <div class="proc-dot earth"></div>
+            <div class="proc-dot air"></div>
+            <div class="proc-dot water"></div>
+            <div class="proc-dot fire"></div>
+          </div>
+          <div class="proc-status">
+            <div class="proc-phase" id="debriefProcPhase">Verwerking</div>
+            <div class="proc-text" id="debriefProcText">Even geduld…</div>
+          </div>
+          <div class="proc-footnote">Focusynthesis® methodologie — debrief lopende</div>
         </div>
 
         <div class="debrief-output" id="debriefOutput">
@@ -650,6 +785,85 @@ function showError(msg) {
   setTimeout(() => el.style.display = 'none', 6000);
 }
 
+// ─── PROCESSING ANIMATION ─────────────────────────────────────────────────────
+// A phased status display that runs while a long API call is in flight.
+// The phases are cosmetic — the real backend call is one block — but they
+// reflect how the model is conceptually working (read → diagnose → write)
+// and signal methodological discipline rather than black-box opacity.
+
+const PHASES_ANALYSE = [
+  { phase: 'Lezing', text: 'Het transcript wordt doorgenomen…' },
+  { phase: 'Lezing', text: 'Patronen tekenen zich af in wat er gezegd is…' },
+  { phase: 'Mapping', text: 'De vier elementen worden in kaart gebracht…' },
+  { phase: 'Mapping', text: 'De Kinetic State wordt vastgesteld…' },
+  { phase: 'Toetsing', text: 'Toetsing aan het Focusynthesis®-model…' },
+  { phase: 'Synthese', text: 'Het rapport wordt geschreven…' },
+  { phase: 'Synthese', text: 'Ontwikkelrichtingen worden uitgewerkt…' },
+  { phase: 'Afronding', text: 'Laatste lezing en consistentie-controle…' },
+];
+
+const PHASES_DEBRIEF = [
+  { phase: 'Herlezing', text: 'Het gesprek wordt opnieuw doorgenomen…' },
+  { phase: 'Herlezing', text: 'Wat er werkelijk gezegd is, wordt teruggevonden…' },
+  { phase: 'Stem', text: 'De stem van de coach wordt opgepakt…' },
+  { phase: 'Compositie', text: 'Een eerste versie vormt zich…' },
+  { phase: 'Compositie', text: 'De mapping wordt in zachte taal verwoord…' },
+  { phase: 'Verfijning', text: 'Toon en ritme worden bijgesteld…' },
+  { phase: 'Afronding', text: 'De brief wordt afgemaakt…' },
+];
+
+let procTimer = null;
+
+function startProcessing(mode) {
+  const phases = mode === 'debrief' ? PHASES_DEBRIEF : PHASES_ANALYSE;
+
+  // Mode-specific DOM targets
+  const procEl   = document.getElementById(mode === 'debrief' ? 'debriefProcessing' : 'processingState');
+  const phaseEl  = document.getElementById(mode === 'debrief' ? 'debriefProcPhase'  : 'procPhase');
+  const textEl   = document.getElementById(mode === 'debrief' ? 'debriefProcText'   : 'procText');
+
+  if (mode === 'analyse') {
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('outputContent').classList.remove('visible');
+  } else {
+    // For debrief, hide any previous debrief output while we regenerate
+    document.getElementById('debriefOutput').classList.remove('visible');
+  }
+  procEl.classList.add('active');
+
+  // Initial phase
+  let i = 0;
+  phaseEl.textContent = phases[0].phase;
+  textEl.textContent  = phases[0].text;
+
+  // Rotate through phases. Roughly 7-8 seconds per phase — slow enough
+  // to read, fast enough to feel alive. If the API call takes longer
+  // than the full sequence, we hold on the last phase.
+  procTimer = setInterval(() => {
+    i++;
+    if (i >= phases.length) {
+      clearInterval(procTimer);
+      procTimer = null;
+      return;
+    }
+    textEl.classList.add('fading');
+    setTimeout(() => {
+      phaseEl.textContent = phases[i].phase;
+      textEl.textContent  = phases[i].text;
+      textEl.classList.remove('fading');
+    }, 400);
+  }, 7500);
+}
+
+function stopProcessing(mode) {
+  if (procTimer) {
+    clearInterval(procTimer);
+    procTimer = null;
+  }
+  const id = mode === 'debrief' ? 'debriefProcessing' : 'processingState';
+  document.getElementById(id).classList.remove('active');
+}
+
 // ─── ANALYSE ─────────────────────────────────────────────────────────────────
 async function analyse() {
   if (!transcriptText) return showError('Laad eerst een transcript.');
@@ -658,6 +872,8 @@ async function analyse() {
   btn.disabled = true;
   btn.classList.add('loading');
   btn.querySelector('.btn-label').textContent = 'Analyseren…';
+
+  startProcessing('analyse');
 
   const payload = {
     client:      document.getElementById('client').value.trim(),
@@ -692,6 +908,7 @@ async function analyse() {
   } catch(e) {
     showError('Analysefout: ' + e.message);
   } finally {
+    stopProcessing('analyse');
     btn.disabled = false;
     btn.classList.remove('loading');
     btn.querySelector('.btn-label').textContent = 'Analyseer sessie';
@@ -909,6 +1126,8 @@ async function generateDebrief() {
   btn.classList.add('loading');
   label.textContent = 'Schrijven…';
 
+  startProcessing('debrief');
+
   try {
     const resp = await fetch('/api/debrief', {
       method: 'POST',
@@ -952,6 +1171,7 @@ async function generateDebrief() {
   } catch(e) {
     showError('Debrief-fout: ' + e.message);
   } finally {
+    stopProcessing('debrief');
     btn.disabled = false;
     btn.classList.remove('loading');
     label.textContent = origLabel;
