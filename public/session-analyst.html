@@ -360,6 +360,68 @@
   .footer-l{font-size:.55rem;letter-spacing:.15em;color:var(--text-muted);text-transform:uppercase;}
   .token-count{font-size:.58rem;color:var(--text-muted);font-style:italic;}
 
+  /* DEBRIEF SECTION */
+  .debrief-section{
+    margin-top:40px;padding-top:32px;
+    border-top:1px solid var(--border-gold);
+  }
+  .debrief-intro{
+    font-size:.6rem;letter-spacing:.25em;
+    color:var(--gold-dim);text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .debrief-intro-sub{
+    font-size:.7rem;color:var(--text-secondary);font-style:italic;
+    line-height:1.5;margin-bottom:18px;
+  }
+  .debrief-controls{
+    display:flex;flex-direction:column;gap:14px;
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    padding:18px;
+  }
+  .checkbox-label{
+    display:flex;align-items:center;gap:10px;
+    font-size:.74rem;color:var(--text-secondary);
+    cursor:pointer;user-select:none;
+    line-height:1.4;
+  }
+  .checkbox-label input[type=checkbox]{
+    width:14px;height:14px;
+    accent-color:var(--gold);
+    cursor:pointer;flex-shrink:0;
+  }
+
+  .debrief-output{margin-top:28px;display:none;}
+  .debrief-output.visible{display:block;}
+  .debrief-header{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    margin-bottom:20px;padding-bottom:14px;
+    border-bottom:1px solid var(--border);
+    gap:16px;
+  }
+  .debrief-meta .title{
+    font-size:.95rem;color:var(--text-primary);
+    letter-spacing:.04em;font-style:italic;
+    margin-bottom:2px;
+  }
+  .debrief-meta .subtitle{
+    font-size:.62rem;color:var(--text-muted);
+    letter-spacing:.06em;
+  }
+
+  /* DEBRIEF BODY — softer, letter-like */
+  .debrief-body{
+    font-size:.86rem;line-height:1.95;
+    color:var(--text-primary);
+    font-family:'Georgia',serif;
+    max-width:64ch;
+  }
+  .debrief-body p{margin-bottom:14px;}
+  .debrief-body strong{color:var(--text-primary);}
+  .debrief-body em{color:var(--text-secondary);}
+
   /* RESPONSIVE */
   @media(max-width:768px){
     main{grid-template-columns:1fr;height:auto;}
@@ -477,6 +539,36 @@
         </div>
       </div>
       <div class="report-body" id="reportBody"></div>
+
+      <!-- DEBRIEF SECTION -->
+      <div class="debrief-section" id="debriefSection" style="display:none;">
+        <div class="debrief-intro">Persoonlijke Debrief</div>
+        <div class="debrief-intro-sub">Een brief in de stem van de coach naar de coachee, opgebouwd vanuit het gesprek en de bovenstaande mapping. Wordt na elke generatie nagelezen voor verzending.</div>
+
+        <div class="debrief-controls">
+          <label class="checkbox-label">
+            <input type="checkbox" id="auditInviteChk">
+            <span>Inclusief uitnodiging voor de Kinetic Audit (alleen als die nog niet is gedaan)</span>
+          </label>
+          <button class="submit-btn" id="debriefBtn" onclick="generateDebrief()">
+            <div class="spinner"></div>
+            <span class="btn-label" id="debriefBtnLabel">Genereer debrief</span>
+          </button>
+        </div>
+
+        <div class="debrief-output" id="debriefOutput">
+          <div class="debrief-header">
+            <div class="debrief-meta">
+              <div class="title" id="debriefTitle">Persoonlijke debrief</div>
+              <div class="subtitle" id="debriefSubtitle">—</div>
+            </div>
+            <div class="output-actions">
+              <button class="action-btn" id="copyDebriefBtn" onclick="copyDebrief()">Kopieer</button>
+            </div>
+          </div>
+          <div class="debrief-body" id="debriefBody"></div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -492,6 +584,7 @@
 let intakeText = '';
 let transcriptText = '';
 let rawReport = '';
+let rawDebrief = '';
 let lastMeta = {};
 
 // ─── FILE READING ────────────────────────────────────────────────────────────
@@ -628,6 +721,20 @@ function renderReport(payload, data) {
   document.getElementById('reportBody').innerHTML = markdownToHtml(data.report);
   document.getElementById('reportBody').scrollTop = 0;
   content.scrollTop = 0;
+
+  // Reset and prepare debrief section for the new analysis
+  rawDebrief = '';
+  document.getElementById('debriefOutput').classList.remove('visible');
+  document.getElementById('auditInviteChk').checked = false;
+
+  const participantName = extractParticipantFirstName(payload.client);
+  if (participantName) {
+    document.getElementById('debriefBtnLabel').textContent =
+      `Genereer debrief voor ${participantName}`;
+    document.getElementById('debriefSection').style.display = '';
+  } else {
+    document.getElementById('debriefSection').style.display = 'none';
+  }
 }
 
 // ─── MINIMAL MARKDOWN → HTML ──────────────────────────────────────────────────
@@ -736,12 +843,127 @@ async function downloadDocx() {
   }
 }
 
-// ─── COPY ─────────────────────────────────────────────────────────────────────
-async function copyReport() {
-  if (!rawReport) return;
+// ─── DEBRIEF — NAME EXTRACTION ────────────────────────────────────────────────
+function extractCoachSigningName(coachField) {
+  const s = (coachField || '').toLowerCase();
+  if (s.includes('stéphane') || s.includes('stephane')) return 'Stephane';
+  if (s.includes('séverine') || s.includes('severine')) return 'Séverine';
+  return null;
+}
+
+function extractParticipantFirstName(clientField) {
+  const s = (clientField || '').trim();
+  if (!s) return null;
+  // First whitespace-separated token. For duos like "Thibault & Melissa"
+  // this returns "Thibault" — a known limitation, sufficient for now.
+  return s.split(/\s+/)[0];
+}
+
+// ─── DEBRIEF — MARKDOWN RENDERER ──────────────────────────────────────────────
+// Simpler than the analyst renderer: the debrief is flowing prose, no badges
+// or conformity rows. Just paragraphs, bold, italic.
+function renderDebriefMarkdown(md) {
+  if (!md) return '';
+  const escaped = md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  const formatted = escaped
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  return formatted
+    .split(/\n\s*\n/)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('\n');
+}
+
+// ─── DEBRIEF — GENERATE ───────────────────────────────────────────────────────
+async function generateDebrief() {
+  if (!rawReport)      return showError('Genereer eerst een analyse.');
+  if (!transcriptText) return showError('Transcript ontbreekt.');
+
+  const coachField  = document.getElementById('coach').value.trim();
+  const clientField = document.getElementById('client').value.trim();
+
+  const coachName = extractCoachSigningName(coachField);
+  if (!coachName) {
+    return showError(
+      "Kon de coach niet herkennen voor de debrief. Het coachveld moet 'Stéphane' of 'Séverine' bevatten."
+    );
+  }
+
+  const participantName = extractParticipantFirstName(clientField);
+  if (!participantName) {
+    return showError('Cliëntnaam ontbreekt — kan geen aanhef genereren.');
+  }
+
+  const includeAuditInvitation = document.getElementById('auditInviteChk').checked;
+
+  const btn   = document.getElementById('debriefBtn');
+  const label = document.getElementById('debriefBtnLabel');
+  const origLabel = label.textContent;
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+  label.textContent = 'Schrijven…';
+
   try {
-    await navigator.clipboard.writeText(rawReport);
-    const btn = document.querySelector('.action-btn');
+    const resp = await fetch('/api/debrief', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        participantName,
+        coachName,
+        transcript:    transcriptText,
+        analystReport: rawReport,
+        intake:        intakeText,
+        includeAuditInvitation,
+      }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({ error: 'Serverfout' }));
+      throw new Error(err.error || 'Serverfout ' + resp.status);
+    }
+
+    const data = await resp.json();
+    rawDebrief = data.debrief;
+
+    // Render
+    const out = document.getElementById('debriefOutput');
+    document.getElementById('debriefTitle').textContent =
+      `Persoonlijke debrief — ${participantName}`;
+    document.getElementById('debriefSubtitle').textContent =
+      `Ondertekend door ${coachName}` + (includeAuditInvitation ? ' · met Audit-uitnodiging' : '');
+    document.getElementById('debriefBody').innerHTML = renderDebriefMarkdown(rawDebrief);
+    out.classList.add('visible');
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Append to token count
+    if (data.outputTokens) {
+      const existing = document.getElementById('tokenInfo').textContent;
+      const debriefInfo = `debrief: +${data.outputTokens} out`;
+      document.getElementById('tokenInfo').textContent =
+        existing ? `${existing} · ${debriefInfo}` : debriefInfo;
+    }
+
+  } catch(e) {
+    showError('Debrief-fout: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    label.textContent = origLabel;
+  }
+}
+
+// ─── DEBRIEF — COPY ───────────────────────────────────────────────────────────
+async function copyDebrief() {
+  if (!rawDebrief) return;
+  try {
+    await navigator.clipboard.writeText(rawDebrief);
+    const btn = document.getElementById('copyDebriefBtn');
     btn.textContent = 'Gekopieerd ✓';
     btn.classList.add('success');
     setTimeout(() => { btn.textContent = 'Kopieer'; btn.classList.remove('success'); }, 2000);
