@@ -252,18 +252,23 @@ function buildUserMessage({ client, coach, sessionNum, date, context, intake, tr
   if (intake)     parts.push(`[INTAKE]\n${intake}`);
   if (prevReports) parts.push(`[PREVIOUS_REPORTS]\n${prevReports}`);
 
-  // Audit scores block — when present, scores must be reproduced verbatim (Diagnostic Rule 7)
-  if (auditScores) {
-    const { kineticState, path, earth, air, water, fire } = auditScores;
+  // Kinetic Audit scores — immutable, must be reproduced verbatim (Diagnostic Rule 7)
+  if (auditScores && typeof auditScores === 'object') {
+    const ks = auditScores.kineticState || 'n/a';
+    const pt = auditScores.path || 'n/a';
+    const e  = auditScores.earth  !== undefined ? auditScores.earth  : 'n/a';
+    const a  = auditScores.air    !== undefined ? auditScores.air    : 'n/a';
+    const w  = auditScores.water  !== undefined ? auditScores.water  : 'n/a';
+    const fi = auditScores.fire   !== undefined ? auditScores.fire   : 'n/a';
     parts.push(
       `[KINETIC_AUDIT]\n` +
-      `Path: ${path || 'n/a'}\n` +
-      `Kinetic State: ${kineticState || 'n/a'}\n` +
-      `Earth: ${earth ?? 'n/a'} / 10\n` +
-      `Air: ${air ?? 'n/a'} / 10\n` +
-      `Water: ${water ?? 'n/a'} / 10\n` +
-      `Fire: ${fire ?? 'n/a'} / 10\n` +
-      `IMPORTANT: These scores are factual audit data. Reproduce them exactly in Section 2. Do not adjust them to match the shadow state definition.`
+      `Path: ${pt}\n` +
+      `Kinetic State: ${ks}\n` +
+      `Earth: ${e} / 10\n` +
+      `Air: ${a} / 10\n` +
+      `Water: ${w} / 10\n` +
+      `Fire: ${fi} / 10\n` +
+      `IMPORTANT: Use these exact scores in Section 2. Do not change them.`
     );
   }
 
@@ -286,7 +291,13 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { client, coach, sessionNum, date, context, intake, transcript, prevReports, auditScores } = req.body || {};
+  const rawBody = req.body || {};
+  const { client, coach, sessionNum, date, context, intake, transcript, prevReports } = rawBody;
+  // auditScores may arrive as a parsed object or as a JSON string depending on client
+  let auditScores = rawBody.auditScores || null;
+  if (typeof auditScores === 'string') {
+    try { auditScores = JSON.parse(auditScores); } catch (_) { auditScores = null; }
+  }
 
   if (!transcript || transcript.trim().length < 100) {
     return res.status(400).json({ error: 'Transcript ontbreekt of is te kort.' });
@@ -303,7 +314,7 @@ module.exports = async function handler(req, res) {
       intake: intake ? intake.slice(0, 20000) : '',
       transcript: transcriptTrimmed,
       prevReports: prevReports ? prevReports.slice(0, 30000) : '',
-      auditScores: auditScores || null,
+      auditScores,
     });
 
     const response = await client_.messages.create({
