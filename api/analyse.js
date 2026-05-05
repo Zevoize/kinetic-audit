@@ -349,7 +349,7 @@ module.exports = async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'claude-sonnet-4-20250514',
         max_tokens: 6000,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: userMessage }],
