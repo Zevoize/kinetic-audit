@@ -358,7 +358,7 @@ module.exports = async function handler(req, res) {
 
     if (!response.ok) {
       const errText = await response.text();
-      return res.status(502).json({ error: 'Upstream API error', detail: errText });
+      return res.status(502).json({ error: 'Upstream API error: ' + errText });
     }
 
     const data = await response.json();
