@@ -2,7 +2,7 @@
 // Focusynthesis® Kinetic Analyst — Serverless API endpoint
 // Deploy to Vercel alongside the existing api/generate.js proxy
 
-const Anthropic = require('@anthropic-ai/sdk');
+// Uses raw fetch — no SDK dependency required
 
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 // Full Focusynthesis® model definition + report structure + constraints
@@ -306,7 +306,8 @@ module.exports = async function handler(req, res) {
   // Transcript length guard — roughly 120k chars max to stay within context
   const transcriptTrimmed = transcript.slice(0, 120000);
 
-  const client_ = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'API key not configured' });
 
   try {
     const userMessage = buildUserMessage({
@@ -317,22 +318,36 @@ module.exports = async function handler(req, res) {
       auditScores,
     });
 
-    const response = await client_.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 6000,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userMessage }],
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 6000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: userMessage }],
+      }),
     });
 
-    const report = response.content
+    if (!response.ok) {
+      const errText = await response.text();
+      return res.status(502).json({ error: 'Upstream API error', detail: errText });
+    }
+
+    const data = await response.json();
+    const report = (data.content || [])
       .filter(b => b.type === 'text')
       .map(b => b.text)
       .join('');
 
     return res.status(200).json({
       report,
-      inputTokens:  response.usage?.input_tokens,
-      outputTokens: response.usage?.output_tokens,
+      inputTokens:  data.usage?.input_tokens,
+      outputTokens: data.usage?.output_tokens,
     });
 
   } catch (err) {
