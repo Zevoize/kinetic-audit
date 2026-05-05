@@ -293,10 +293,33 @@ module.exports = async function handler(req, res) {
 
   const rawBody = req.body || {};
   const { client, coach, sessionNum, date, context, intake, transcript, prevReports } = rawBody;
-  // auditScores may arrive as a parsed object or as a JSON string depending on client
-  let auditScores = rawBody.auditScores || null;
-  if (typeof auditScores === 'string') {
-    try { auditScores = JSON.parse(auditScores); } catch (_) { auditScores = null; }
+
+  // Parse audit text (plain text from the Kinetic Audit email) into structured scores.
+  // The frontend sends this as rawBody.audit — a pasted string like:
+  //   "EARTH 9/10  AIR 10/10\nWATER 10/10  FIRE 8/10\nKINETIC STATE\nThe Mist\nPATH\nKinetic Lens"
+  let auditScores = null;
+  const auditText = typeof rawBody.audit === 'string' ? rawBody.audit : '';
+  if (auditText) {
+    const num = (label) => {
+      const m = auditText.match(new RegExp(label + '[^\\d]*(\\d+)\\s*/\\s*10', 'i'));
+      return m ? parseInt(m[1], 10) : undefined;
+    };
+    const stateM = auditText.match(/kinetic[\s\S]*?state[^\n]*\n([^\n]+)/i)
+                || auditText.match(/The\s+(Mist|Drift|Freeze|Smolder|Drought|Grindstone|Firestorm|Mud|Inertia)/i);
+    const pathM  = auditText.match(/path[^\n]*\n([^\n]+)/i)
+                || auditText.match(/kinetic\s+(lens|baseline)/i);
+    auditScores = {
+      earth:        num('earth'),
+      air:          num('air'),
+      water:        num('water'),
+      fire:         num('fire'),
+      kineticState: stateM ? stateM[1].trim() : undefined,
+      path:         pathM  ? pathM[1].trim()  : undefined,
+    };
+    // Only keep if at least one score was found
+    const hasScores = [auditScores.earth, auditScores.air, auditScores.water, auditScores.fire]
+                        .some(v => v !== undefined);
+    if (!hasScores) auditScores = null;
   }
 
   if (!transcript || transcript.trim().length < 100) {
